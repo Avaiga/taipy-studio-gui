@@ -1,5 +1,6 @@
 .gitignore
 .vscode/
+.github/
 README.DEV.md
 css/
 l10n/

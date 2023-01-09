@@ -4,13 +4,13 @@
   "description": "Provide support for taipy-gui package",
   "publisher": "Avaiga",
   "version": "0.0.2",
-  "homepage": "https://github.com/Avaiga/taipy-studio.git",
+  "homepage": "https://github.com/Avaiga/taipy-studio-gui.git",
   "repository": {
     "type": "git",
-    "url": "https://github.com/Avaiga/taipy-studio.git"
+    "url": "https://github.com/Avaiga/taipy-studio-gui.git"
   },
   "bugs": {
-    "url": "https://github.com/Avaiga/taipy-studio/issues"
+    "url": "https://github.com/Avaiga/taipy-studio-gui/issues"
   },
   "engines": {
     "vscode": "^1.73.1"
