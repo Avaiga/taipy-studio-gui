@@ -56,15 +56,15 @@
     ]
   },
   "scripts": {
+    "vscode:prepublish": "npm run package",
     "compile": "webpack",
     "watch": "webpack --watch",
-    "package": "webpack --mode production --devtool hidden-source-map && vsce package",
+    "package": "webpack --mode production --devtool hidden-source-map",
     "compile-tests": "tsc -p . --outDir out",
     "watch-tests": "tsc -p . -w --outDir out",
     "pretest": "npm run compile-tests && npm run compile && npm run lint",
     "lint": "eslint src --ext ts",
     "test": "node ./out/test/runTest.js",
-    "vscode:prepublish": "npm run package",
     "deploy": "vsce publish",
     "prerelease-deploy": "vsce publish --pre-release"
   },
