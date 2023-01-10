@@ -2,8 +2,8 @@
   "name": "taipy-studio-gui",
   "displayName": "Taipy Studio: GUI",
   "description": "Provide support for taipy-gui package",
-  "publisher": "Avaiga",
-  "version": "0.0.2",
+  "publisher": "Taipy",
+  "version": "0.0.1",
   "homepage": "https://github.com/Avaiga/taipy-studio-gui.git",
   "repository": {
     "type": "git",
