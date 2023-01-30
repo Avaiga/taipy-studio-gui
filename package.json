@@ -1,5 +1,5 @@
 {
-  "name": "taipy-studio-gui",
+  "name": "studio-gui",
   "displayName": "Taipy Studio GUI Helper",
   "description": "Provide support for taipy-gui package",
   "publisher": "Taipy",
