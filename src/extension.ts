@@ -14,12 +14,21 @@
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import { GuiContext } from "./gui";
-import { ExtensionContext } from "vscode";
+import { commands, ExtensionContext, window, workspace } from "vscode";
+import cp from "child_process";
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export async function activate(context: ExtensionContext) {
     GuiContext.register(context);
+    console.log(workspace.getConfiguration('python'));
+    cp.exec('python --version', (err, stdout, stderr) => {
+    console.log('stdout: ' + stdout);
+    console.log('stderr: ' + stderr);
+    if (err) {
+        console.log('error: ' + err);
+    }
+});
 }
 
 // This method is called when your extension is deactivated

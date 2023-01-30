@@ -53,7 +53,22 @@
         "language": "markdown",
         "path": "./dist/snippets.json"
       }
-    ]
+    ],
+    "configuration": {
+      "title": "Taipy Studio Gui Helper",
+      "properties": {
+        "taipy.gui.elementsFilePath": {
+          "type": "string",
+          "default": "",
+          "description": "Specifies the file path for visual elements json file. If this property is empty, the default built in file will be used"
+        },
+        "taipy.gui.autoDetectElementFiles": {
+          "type": "boolean",
+          "default": true,
+          "description": "Auto Detect Element Files based on Python path"
+        }
+      }
+    }
   },
   "scripts": {
     "compile": "webpack",
