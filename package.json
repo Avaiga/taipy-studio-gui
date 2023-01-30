@@ -3,7 +3,7 @@
   "displayName": "Taipy Studio GUI Helper",
   "description": "Provide support for taipy-gui package",
   "publisher": "Taipy",
-  "version": "0.1.0",
+  "version": "0.1.2",
   "homepage": "https://github.com/Avaiga/taipy-studio-gui.git",
   "repository": {
     "type": "git",
