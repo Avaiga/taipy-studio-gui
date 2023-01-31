@@ -27,9 +27,9 @@ import {
     TextDocument,
     WorkspaceEdit,
 } from "vscode";
-import { defaultOnFunctionSignature } from "./constant";
 
 import { DiagnosticCode, PROPERTY_RE } from "./diagnostics";
+import { ElementProvider } from "./elementProvider";
 import { generateOnFunction, markdownDocumentFilter, pythonDocumentFilter } from "./utils";
 
 export class MarkdownActionProvider implements CodeActionProvider {
@@ -118,7 +118,7 @@ export class MarkdownActionProvider implements CodeActionProvider {
         action.edit.insert(
             document.uri,
             quotePositions.length > 0 ? quotePositions[0].translate(0, 3) : new Position(document.lineCount - 1, 0),
-            "\n\n" + generateOnFunction(defaultOnFunctionSignature[onFunctionType] || [["state", "State"]], functionName)
+            "\n\n" + generateOnFunction(ElementProvider.getOnFunctionSignature()[onFunctionType] || [["state", "State"]], functionName)
         );
         return action;
     }

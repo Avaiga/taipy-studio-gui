@@ -25,7 +25,8 @@
     "workspaceContains:**/*.py",
     "onLanguage:python",
     "onLanguage:markdown",
-    "onCommand:taipy.gui.md.generate"
+    "onCommand:taipy.gui.md.generate",
+    "onCommand:taipy.gui.md.findElementFile"
   ],
   "main": "./dist/taipy-studio-gui.js",
   "capabilities": {
@@ -42,6 +43,10 @@
       {
         "command": "taipy.gui.md.generate",
         "title": "%taipy.gui.md.generate.title%"
+      },
+      {
+        "command": "taipy.gui.md.findElementFile",
+        "title": "%taipy.gui.md.findElementFile.title%"
       }
     ],
     "snippets": [
@@ -60,12 +65,7 @@
         "taipy.gui.elementsFilePath": {
           "type": "string",
           "default": "",
-          "description": "Specifies the file path for visual elements json file. If this property is empty, the default built in file will be used"
-        },
-        "taipy.gui.autoDetectElementFiles": {
-          "type": "boolean",
-          "default": true,
-          "description": "Auto Detect Element Files based on Python path"
+          "description": "%taipy.gui.elementsFilePath.description%"
         }
       }
     }

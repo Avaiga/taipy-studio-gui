@@ -11,12 +11,14 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { DocumentFilter } from "vscode";
+import { exec } from "child_process";
+import { existsSync, readFileSync } from "fs";
+import { DocumentFilter, workspace } from "vscode";
 
 export const countChar = (str: string, char: string): number => {
     return str.split(char).length - 1;
 };
-interface ElementProperty {
+export interface ElementProperty {
     name: string;
     // eslint-disable-next-line @typescript-eslint/naming-convention
     default_property?: any;
@@ -165,3 +167,50 @@ export const generateOnFunction = (signature: [string, string][], functionName: 
 
 export const markdownDocumentFilter: DocumentFilter = { language: "markdown" };
 export const pythonDocumentFilter: DocumentFilter = { language: "python" };
+
+export const execShell = (cmd: string) =>
+    new Promise<string>((resolve, reject) => {
+        exec(cmd, (err, out) => {
+            if (err) {
+                console.log(err);
+                return reject(err);
+            }
+            return resolve(out);
+        });
+    });
+
+export const getElementFilePath = (): string | null => {
+    const config = workspace.getConfiguration("taipy.gui");
+    if (config.has("elementsFilePath") && config.get("elementsFilePath")) {
+        const filePath = config.get("elementsFilePath") as string;
+        if (existsSync(filePath)) {
+            return filePath;
+        }
+        // Reset if filepath is not valid
+        updateFilePath("");
+        return null;
+    }
+    return null;
+};
+
+export const updateFilePath = (path: string) => {
+    const config = workspace.getConfiguration("taipy.gui");
+    config.update("elementsFilePath", path);
+};
+
+export const getElementFile = (path: string): object | undefined => {
+    try {
+        const content = readFileSync(path, { encoding: "utf8", flag: "r" });
+        const elements = JSON.parse(content);
+        if ("controls" in elements && "blocks" in elements && "undocumented" in elements) {
+            return elements;
+        }
+        // Reset if filepath is not valid
+        if (path === getElementFilePath()) {
+            updateFilePath("");
+        }
+        return undefined;
+    } catch (error) {
+        return undefined;
+    }
+};

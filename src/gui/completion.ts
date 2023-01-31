@@ -28,7 +28,8 @@ import {
     TextDocument,
     Uri,
 } from "vscode";
-import { defaultElementList, defaultElementProperties, defaultOnFunctionList, LanguageId } from "./constant";
+import { LanguageId } from "./constant";
+import { ElementProvider } from "./elementProvider";
 import { markdownDocumentFilter, parseProperty, pythonDocumentFilter } from "./utils";
 
 const RE_LINE = /<(([\|]{1})([^\|]*)){1,2}/;
@@ -83,7 +84,7 @@ export class GuiCompletionItemProvider implements CompletionItemProvider {
                 return await this.getSymbols(Uri.file(potentialPythonFile), SymbolKind.Variable, CompletionItemKind.Variable);
             }
             // function name for 'on_*' properties
-            if (linePrefix.endsWith("=") && defaultOnFunctionList.some((v) => linePrefix.endsWith(v + "="))) {
+            if (linePrefix.endsWith("=") && ElementProvider.getOnFunctionList().some((v) => linePrefix.endsWith(v + "="))) {
                 return await this.getSymbols(Uri.file(potentialPythonFile), SymbolKind.Function, CompletionItemKind.Function);
             }
         }
@@ -96,7 +97,7 @@ export class GuiCompletionItemProvider implements CompletionItemProvider {
             return await this.getSymbols(document.uri, SymbolKind.Variable, CompletionItemKind.Variable);
         }
         // function name for 'on_*' properties
-        if (linePrefix.endsWith("=") && defaultOnFunctionList.some((v) => linePrefix.endsWith(v + "="))) {
+        if (linePrefix.endsWith("=") && ElementProvider.getOnFunctionList().some((v) => linePrefix.endsWith(v + "="))) {
             return await this.getSymbols(document.uri, SymbolKind.Function, CompletionItemKind.Function);
         }
         return this.getCommonCompletion(document, linePrefix);
@@ -104,18 +105,19 @@ export class GuiCompletionItemProvider implements CompletionItemProvider {
 
     private async getCommonCompletion(document: TextDocument, linePrefix: string): Promise<CompletionItem[]> {
         if (linePrefix.endsWith("|")) {
-            const foundElements = defaultElementList.reduce((p: string[], c: string) => {
+            const foundElements = ElementProvider.getElementList().reduce((p: string[], c: string) => {
                 linePrefix.includes(`|${c}`) && p.push(c);
                 return p;
             }, []);
             // element type completion
             if (linePrefix.match(RE_LINE) && foundElements.length === 0) {
-                return defaultElementList.map((v) => new CompletionItem(v, CompletionItemKind.Keyword));
+                return ElementProvider.getElementList().map((v) => new CompletionItem(v, CompletionItemKind.Keyword));
             }
             // element property completion
             if (linePrefix.match(RE_LINE) && foundElements.length > 0) {
                 const latestElement = foundElements[foundElements.length - 1];
-                const properties = defaultElementProperties[latestElement as keyof typeof defaultElementProperties];
+                const elementProperties = ElementProvider.getElementProperties();
+                const properties = elementProperties[latestElement as keyof typeof elementProperties];
                 if (properties !== undefined) {
                     return Object.keys(properties)
                         .reduce((p: string[], c: string) => {
@@ -124,7 +126,9 @@ export class GuiCompletionItemProvider implements CompletionItemProvider {
                         }, [])
                         .map((v) => {
                             let completionItem = new CompletionItem(v, CompletionItemKind.Property);
-                            completionItem.documentation = new MarkdownString(parseProperty(properties[v as keyof typeof properties]));
+                            completionItem.documentation = new MarkdownString(
+                                parseProperty(properties[v as keyof typeof properties])
+                            );
                             return completionItem;
                         });
                 }
@@ -139,6 +143,8 @@ export class GuiCompletionItemProvider implements CompletionItemProvider {
         completionItemKind: CompletionItemKind
     ): Promise<CompletionItem[]> {
         const symbols = (await commands.executeCommand("vscode.executeDocumentSymbolProvider", uri)) as SymbolInformation[];
-        return !symbols ? [] : symbols.filter((v) => v.kind === symbolKind).map((v) => new CompletionItem(v.name, completionItemKind));
+        return !symbols
+            ? []
+            : symbols.filter((v) => v.kind === symbolKind).map((v) => new CompletionItem(v.name, completionItemKind));
     }
 }
