@@ -18,6 +18,8 @@
   "icon": "assets/taipy-logo.png",
   "l10n": "./dist/l10n",
   "categories": [
+    "Linters", 
+    "Data Science",
     "Other"
   ],
   "activationEvents": [
