@@ -13,7 +13,7 @@
 
 import { ExtensionContext } from "vscode";
 import { MarkdownActionProvider } from "./codeAction";
-import { GenerateGuiCommand } from "./command";
+import { GenerateGuiCommand, FindElementsFileCommand } from "./command";
 import { GuiCompletionItemProvider } from "./completion";
 import { registerDiagnostics } from "./diagnostics";
 
@@ -26,6 +26,7 @@ export class GuiContext {
         registerDiagnostics(context);
         GuiCompletionItemProvider.register(context);
         GenerateGuiCommand.register(context);
+        FindElementsFileCommand.register(context);
         MarkdownActionProvider.register(context);
     }
 }

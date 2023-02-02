@@ -28,7 +28,8 @@ import {
     workspace,
 } from "vscode";
 import { findBestMatch } from "string-similarity";
-import { defaultElementList, defaultBlockElementList, defaultElementProperties, LanguageId } from "./constant";
+import { LanguageId } from "./constant";
+import { ElementProvider } from "./elementProvider";
 
 const CONTROL_RE = /<\|(.*?)\|>/;
 const OPENING_TAG_RE = /<([0-9a-zA-Z\_\.]*)\|((?:(?!\|>).)*)\s*$/;
@@ -142,7 +143,7 @@ const getSectionDiagnostics = (diagnosticSection: DiagnosticSection): Diagnostic
                 element = e;
                 diagnostics.push(...d);
             }
-            if (defaultBlockElementList.includes(element.type)) {
+            if (ElementProvider.getBlockElementList().includes(element.type)) {
                 tagQueue.push([
                     element,
                     getRangeOfStringInline(line, openingTagSearch[0], new Position(lineCount, 0)),
@@ -238,7 +239,7 @@ const getSectionDiagnostics = (diagnosticSection: DiagnosticSection): Diagnostic
         if (tagId) {
             diagnostics.push(
                 createWarningDiagnostic(
-                    l10n.t("Missing closing tag with tag identifier '{0}'", tagId),
+                    l10n.t("Missing closing tag for opened tag '{0}'", tagId),
                     DiagnosticCode.missCTagId,
                     getRangeFromPosition(p, inlineP)
                 )
@@ -266,7 +267,7 @@ const processElement = (
     const fragments = s.split(SPLIT_RE).filter((v) => !!v);
     const e = buildEmptyTaipyElement();
     fragments.forEach((fragment) => {
-        if (!e.type && defaultElementList.includes(fragment)) {
+        if (!e.type && ElementProvider.getElementList().includes(fragment)) {
             e.type = fragment;
             return;
         }
@@ -290,7 +291,7 @@ const processElement = (
         const propNameMatch = PROPERTY_NAME_RE.exec(propMatch[2]);
         const propName = propNameMatch ? propNameMatch[1] : propMatch[2];
         const val = propMatch[3];
-        const validPropertyList = Object.keys(defaultElementProperties[e.type] || []);
+        const validPropertyList = Object.keys(ElementProvider.getElementProperties()[e.type] || []);
         if (validPropertyList.length !== 0 && !validPropertyList.includes(propName)) {
             const bestMatch = findBestMatch(propName, validPropertyList).bestMatch;
             let dS = l10n.t("Invalid property name '{0}'", propName);

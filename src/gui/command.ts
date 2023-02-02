@@ -11,9 +11,10 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { commands, ExtensionContext, l10n, window, workspace, WorkspaceEdit } from "vscode";
-import { defaultElementList, defaultElementProperties } from "./constant";
-import { countChar, parseProperty } from "./utils";
+import { join } from "path";
+import { commands, ExtensionContext, l10n, ProgressLocation, window, workspace, WorkspaceEdit } from "vscode";
+import { ElementProvider } from "./elementProvider";
+import { countChar, execShell, parseProperty, updateFilePath } from "./utils";
 
 interface GuiElement {
     elementName: string;
@@ -33,7 +34,7 @@ export class GenerateGuiCommand {
     }
 
     private static async handleGenerateElementCommand() {
-        const result = await window.showQuickPick(defaultElementList, {
+        const result = await window.showQuickPick(ElementProvider.getElementList(), {
             placeHolder: l10n.t("Select an element type"),
         });
         if (result === undefined) {
@@ -62,7 +63,8 @@ export class GenerateGuiCommand {
 
     private static async handleElementPropertySelection(guiElement: GuiElement) {
         const quickPick = window.createQuickPick();
-        const propertyObject = defaultElementProperties[guiElement.elementName as keyof typeof defaultElementProperties];
+        const elementProperties = ElementProvider.getElementProperties();
+        const propertyObject = elementProperties[guiElement.elementName as keyof typeof elementProperties];
         if (Object.keys(propertyObject).length === 0) {
             GenerateGuiCommand.addGuiElement(guiElement);
             return;
@@ -94,6 +96,52 @@ export class GenerateGuiCommand {
         }
         edit.insert(activeEditor?.document.uri, activeEditor?.selection.active, elementString);
         workspace.applyEdit(edit);
-        window.showInformationMessage(l10n.t("Element added"));
+        window.showInformationMessage(l10n.t("Visual Element added"));
+    }
+}
+
+export class FindElementsFileCommand {
+    static register(vsContext: ExtensionContext): void {
+        new FindElementsFileCommand(vsContext);
+    }
+
+    private constructor(readonly context: ExtensionContext) {
+        context.subscriptions.push(
+            commands.registerCommand("taipy.gui.md.findElementFile", FindElementsFileCommand.commandEntry)
+        );
+    }
+
+    private static async commandEntry() {
+        const result = await window.showInputBox({
+            placeHolder: l10n.t("Enter Python executable path. `python` value will be used if the field is empty"),
+            prompt: l10n.t("This path is used to locate the visual element descriptors file"),
+        });
+        if (result === undefined) {
+            return;
+        }
+        window.withProgress(
+            {
+                location: ProgressLocation.Notification,
+                cancellable: false,
+                title: l10n.t("Finding visual element descriptors file"),
+            },
+            async (progress) => {
+                try {
+                    let execResult = await execShell(
+                        `${result || "python"} ${join(__dirname, "assets", "find_element_file.py")}`
+                    );
+                    if (execResult.startsWith("Path: ")) {
+                        updateFilePath(execResult.substring(6));
+                        window.showInformationMessage(l10n.t("Visual element descriptors file was found and updated in workspace settings"));
+                    } else if (execResult) {
+                        window.showErrorMessage(execResult);
+                    } else {
+                        window.showErrorMessage(l10n.t("Can't find visual element descriptors file with the provided environment"));
+                    }
+                } catch (error) {
+                    window.showErrorMessage(l10n.t("Can't find visual element descriptors file with the provided environment"));
+                }
+            }
+        );
     }
 }

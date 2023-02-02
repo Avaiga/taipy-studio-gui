@@ -11,8 +11,10 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import visualElements from "../assets/viselements.json";
-import { getBlockElementList, getControlElementList, getElementList, getElementProperties, getOnFunctionList, getOnFunctionSignature } from "./utils";
+import { join } from "path";
+import { getBlockElementList, getControlElementList, getElementFile, getElementList, getElementProperties, getOnFunctionList, getOnFunctionSignature } from "./utils";
+
+const visualElements = getElementFile(join(__dirname, "assets", "viselements.json")) || {};
 
 // object of all elements each with all of its properties
 export const defaultElementProperties = getElementProperties(visualElements);

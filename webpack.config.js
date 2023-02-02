@@ -52,6 +52,10 @@ const extensionConfig = {
         {
           from: path.resolve(__dirname, "snippets.json"),
         },
+        {
+          from: path.resolve(__dirname, "src", "assets"),
+          to: "assets",
+        },
       ]
     })
   ],
@@ -66,17 +70,6 @@ const extensionConfig = {
           }
         ]
       },
-      {
-        type: 'asset/resource',
-        test: /\.json$/,
-        generator: {
-          filename: 'assets/[name][ext]'
-        }
-      },
-      {
-        test: /\.json$/,
-        type: 'json',
-    }
     ],
   },
   devtool: 'nosources-source-map',
