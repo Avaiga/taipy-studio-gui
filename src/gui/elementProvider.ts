@@ -35,19 +35,19 @@ export class ElementProvider {
     private static elementCache: Record<string, Record<string, any>> = {};
 
     public static getElementProperties(): Record<string, Record<string, ElementProperty>> {
-        return this.resolve("elementProperties", defaultElementProperties, getElementProperties);
+        return ElementProvider.resolve("elementProperties", defaultElementProperties, getElementProperties);
     }
 
     public static getElementList(): string[] {
-        return this.resolve("elementList", defaultElementList, getElementList);
+        return ElementProvider.resolve("elementList", defaultElementList, getElementList);
     }
 
     public static getControlElementList(): string[] {
-        return this.resolve("controlElementList", defaultControlElementList, getControlElementList);
+        return ElementProvider.resolve("controlElementList", defaultControlElementList, getControlElementList);
     }
 
     public static getBlockElementList(): string[] {
-        return this.resolve("blockElementList", defaultBlockElementList, getBlockElementList);
+        return ElementProvider.resolve("blockElementList", defaultBlockElementList, getBlockElementList);
     }
 
     public static getOnFunctionList(): string[] {
@@ -55,7 +55,7 @@ export class ElementProvider {
         if (filePath === null) {
             return defaultOnFunctionList;
         }
-        return getOnFunctionList(this.getElementProperties());
+        return getOnFunctionList(ElementProvider.getElementProperties());
     }
 
     public static getOnFunctionSignature(): Record<string, [string, string][]> {
@@ -63,7 +63,7 @@ export class ElementProvider {
         if (filePath === null) {
             return defaultOnFunctionSignature;
         }
-        return getOnFunctionSignature(this.getElementProperties());
+        return getOnFunctionSignature(ElementProvider.getElementProperties());
     }
 
     private static resolve(propertyName: string, defaultValue: any, elementsAnalyzer: (viselements: object) => any) {
@@ -71,21 +71,21 @@ export class ElementProvider {
         if (filePath === null) {
             return defaultValue;
         }
-        if (this.elementCache[filePath] === undefined) {
-            this.elementCache[filePath] = {};
+        if (ElementProvider.elementCache[filePath] === undefined) {
+            ElementProvider.elementCache[filePath] = {};
         }
-        if (propertyName in this.elementCache[filePath]) {
-            return this.elementCache[filePath][propertyName];
+        if (propertyName in ElementProvider.elementCache[filePath]) {
+            return ElementProvider.elementCache[filePath][propertyName];
         }
-        const visualElements = this.elementCache[filePath]["visualElements"] || getElementFile(filePath);
+        const visualElements = ElementProvider.elementCache[filePath]["visualElements"] || getElementFile(filePath);
         if (!visualElements) {
             return defaultValue;
         }
-        if (!(propertyName in this.elementCache[filePath])) {
-            this.elementCache[filePath].visualElements = visualElements;
+        if (!(propertyName in ElementProvider.elementCache[filePath])) {
+            ElementProvider.elementCache[filePath].visualElements = visualElements;
         }
         const result = elementsAnalyzer(visualElements);
-        this.elementCache[filePath][propertyName] = result;
+        ElementProvider.elementCache[filePath][propertyName] = result;
         return result;
     }
 }

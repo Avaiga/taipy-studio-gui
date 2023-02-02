@@ -211,6 +211,7 @@ export const getElementFile = (path: string): object | undefined => {
         }
         return undefined;
     } catch (error) {
+        console.info(error);
         return undefined;
     }
 };

@@ -239,7 +239,7 @@ const getSectionDiagnostics = (diagnosticSection: DiagnosticSection): Diagnostic
         if (tagId) {
             diagnostics.push(
                 createWarningDiagnostic(
-                    l10n.t("Missing closing tag with tag identifier '{0}'", tagId),
+                    l10n.t("Missing closing tag for opened tag '{0}'", tagId),
                     DiagnosticCode.missCTagId,
                     getRangeFromPosition(p, inlineP)
                 )
