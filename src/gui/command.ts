@@ -14,6 +14,7 @@
 import { join } from "path";
 import { commands, ExtensionContext, l10n, ProgressLocation, window, workspace, WorkspaceEdit } from "vscode";
 import { ElementProvider } from "./elementProvider";
+import { getLog } from "./logging";
 import { countChar, execShell, parseProperty, updateFilePath } from "./utils";
 
 interface GuiElement {
@@ -118,10 +119,10 @@ export class FindElementsFileCommand {
                 "python.interpreterPath",
                 workspace.workspaceFolders?.map(({ uri }) => uri.fsPath)
             );
-            pythonPath = pythonPath || workspace.getConfiguration("python").get("defaultInterpreterPath", "python");
-        } catch (error) {
-            window.showErrorMessage(l10n.t("Can't find visual element descriptors file with the provided environment"));
+        } catch (error: any) {
+            getLog().info(l10n.t("Find element descriptors file: "), error.message || error);
         }
+        pythonPath = pythonPath || workspace.getConfiguration("python").get("defaultInterpreterPath", "python");
         window.withProgress(
             {
                 location: ProgressLocation.Notification,
@@ -130,7 +131,7 @@ export class FindElementsFileCommand {
             },
             async (progress) => {
                 try {
-                    let execResult = await execShell(`${pythonPath} ${join(__dirname, "assets", "find_element_file.py")}`);
+                    const execResult = await execShell(`${pythonPath} ${join(__dirname, "assets", "find_element_file.py")}`);
                     if (execResult.startsWith("Path: ")) {
                         updateFilePath(execResult.substring(6));
                         window.showInformationMessage(
@@ -143,8 +144,8 @@ export class FindElementsFileCommand {
                             l10n.t("Can't find visual element descriptors file with the selected environment")
                         );
                     }
-                } catch (error) {
-                    console.info(error);
+                } catch (error: any) {
+                    getLog().error(l10n.t("Find element descriptors file: "), error.message || error);
                     window.showErrorMessage(l10n.t("Can't find visual element descriptors file with the selected environment"));
                 }
             }

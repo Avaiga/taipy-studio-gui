@@ -34,3 +34,5 @@ export enum LanguageId {
     py = "python",
     md = "markdown",
 }
+
+export const CONFIG_NAME = "taipyStudio.gUI";
