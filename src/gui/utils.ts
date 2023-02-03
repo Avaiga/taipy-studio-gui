@@ -180,7 +180,7 @@ export const execShell = (cmd: string) =>
     });
 
 export const getElementFilePath = (): string | null => {
-    const config = workspace.getConfiguration("taipy.gui");
+    const config = workspace.getConfiguration("taipyStudio.gUI");
     if (config.has("elementsFilePath") && config.get("elementsFilePath")) {
         const filePath = config.get("elementsFilePath") as string;
         if (existsSync(filePath)) {
@@ -194,7 +194,7 @@ export const getElementFilePath = (): string | null => {
 };
 
 export const updateFilePath = (path: string) => {
-    const config = workspace.getConfiguration("taipy.gui");
+    const config = workspace.getConfiguration("taipyStudio.gUI");
     config.update("elementsFilePath", path);
 };
 

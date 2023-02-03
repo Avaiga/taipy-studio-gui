@@ -1,5 +1,5 @@
 {
     "taipy.gui.md.generate.title": "Taipy: Generate visual element",
     "taipy.gui.md.findElementFile.title": "Taipy: Locate visual element descriptors file in taipy-gui package",
-    "taipy.gui.elementsFilePath.description": "Specifies the path for visual element descriptors file. If this property is empty, the default visual element descriptors file will be used"
+    "taipyStudio.gUI.elementsFilePath.description": "Specifies the path for visual element descriptors file. If this property is empty, the default visual element descriptors file will be used"
 }

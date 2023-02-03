@@ -10,4 +10,4 @@ if util.find_spec("taipy") and util.find_spec("taipy.gui"):
     else:
         print("Visual element descriptors file not found in taipy-gui package")
 else:
-    print("taipy-gui python package is not installed")
+    print("taipy-gui package is not installed within the selected python environment")
