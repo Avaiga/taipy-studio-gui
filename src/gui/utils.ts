@@ -13,7 +13,9 @@
 
 import { exec } from "child_process";
 import { existsSync, readFileSync } from "fs";
-import { DocumentFilter, workspace } from "vscode";
+import { DocumentFilter, l10n, workspace } from "vscode";
+import { CONFIG_NAME } from "./constant";
+import { getLog } from "./logging";
 
 export const countChar = (str: string, char: string): number => {
     return str.split(char).length - 1;
@@ -172,7 +174,7 @@ export const execShell = (cmd: string) =>
     new Promise<string>((resolve, reject) => {
         exec(cmd, (err, out) => {
             if (err) {
-                console.log(err);
+                getLog().error(l10n.t("Find element descriptors file: "), err.message || err);
                 return reject(err);
             }
             return resolve(out);
@@ -180,7 +182,7 @@ export const execShell = (cmd: string) =>
     });
 
 export const getElementFilePath = (): string | null => {
-    const config = workspace.getConfiguration("taipy.gui");
+    const config = workspace.getConfiguration(CONFIG_NAME);
     if (config.has("elementsFilePath") && config.get("elementsFilePath")) {
         const filePath = config.get("elementsFilePath") as string;
         if (existsSync(filePath)) {
@@ -194,7 +196,7 @@ export const getElementFilePath = (): string | null => {
 };
 
 export const updateFilePath = (path: string) => {
-    const config = workspace.getConfiguration("taipy.gui");
+    const config = workspace.getConfiguration(CONFIG_NAME);
     config.update("elementsFilePath", path);
 };
 
@@ -210,8 +212,8 @@ export const getElementFile = (path: string): object | undefined => {
             updateFilePath("");
         }
         return undefined;
-    } catch (error) {
-        console.info(error);
+    } catch (error: any) {
+        getLog().error(l10n.t("Parse element descriptors file: "), error.message || error);
         return undefined;
     }
 };

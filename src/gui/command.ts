@@ -14,6 +14,7 @@
 import { join } from "path";
 import { commands, ExtensionContext, l10n, ProgressLocation, window, workspace, WorkspaceEdit } from "vscode";
 import { ElementProvider } from "./elementProvider";
+import { getLog } from "./logging";
 import { countChar, execShell, parseProperty, updateFilePath } from "./utils";
 
 interface GuiElement {
@@ -112,13 +113,16 @@ export class FindElementsFileCommand {
     }
 
     private static async commandEntry() {
-        const result = await window.showInputBox({
-            placeHolder: l10n.t("Enter Python executable path. `python` value will be used if the field is empty"),
-            prompt: l10n.t("This path is used to locate the visual element descriptors file"),
-        });
-        if (result === undefined) {
-            return;
+        let pythonPath = "";
+        try {
+            pythonPath = await commands.executeCommand(
+                "python.interpreterPath",
+                workspace.workspaceFolders?.map(({ uri }) => uri.fsPath)
+            );
+        } catch (error: any) {
+            getLog().info(l10n.t("Find element descriptors file: "), error.message || error);
         }
+        pythonPath = pythonPath || workspace.getConfiguration("python").get("defaultInterpreterPath", "python");
         window.withProgress(
             {
                 location: ProgressLocation.Notification,
@@ -127,19 +131,22 @@ export class FindElementsFileCommand {
             },
             async (progress) => {
                 try {
-                    let execResult = await execShell(
-                        `${result || "python"} ${join(__dirname, "assets", "find_element_file.py")}`
-                    );
+                    const execResult = await execShell(`${pythonPath} ${join(__dirname, "assets", "find_element_file.py")}`);
                     if (execResult.startsWith("Path: ")) {
                         updateFilePath(execResult.substring(6));
-                        window.showInformationMessage(l10n.t("Visual element descriptors file was found and updated in workspace settings"));
+                        window.showInformationMessage(
+                            l10n.t("Visual element descriptors file was found and updated in workspace settings")
+                        );
                     } else if (execResult) {
                         window.showErrorMessage(execResult);
                     } else {
-                        window.showErrorMessage(l10n.t("Can't find visual element descriptors file with the provided environment"));
+                        window.showErrorMessage(
+                            l10n.t("Can't find visual element descriptors file with the selected environment")
+                        );
                     }
-                } catch (error) {
-                    window.showErrorMessage(l10n.t("Can't find visual element descriptors file with the provided environment"));
+                } catch (error: any) {
+                    getLog().error(l10n.t("Find element descriptors file: "), error.message || error);
+                    window.showErrorMessage(l10n.t("Can't find visual element descriptors file with the selected environment"));
                 }
             }
         );

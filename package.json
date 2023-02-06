@@ -62,12 +62,12 @@
       }
     ],
     "configuration": {
-      "title": "Taipy Studio Gui Helper",
+      "title": "Taipy Studio GUI Helper",
       "properties": {
-        "taipy.gui.elementsFilePath": {
+        "taipyStudio.gUI.elementsFilePath": {
           "type": "string",
           "default": "",
-          "description": "%taipy.gui.elementsFilePath.description%"
+          "description": "%taipyStudio.gUI.elementsFilePath.description%"
         }
       }
     }
