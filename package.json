@@ -18,7 +18,7 @@
   "icon": "assets/taipy-logo.png",
   "l10n": "./dist/l10n",
   "categories": [
-    "Linters", 
+    "Linters",
     "Data Science",
     "Other"
   ],
@@ -70,7 +70,11 @@
           "description": "%taipyStudio.gUI.elementsFilePath.description%"
         }
       }
-    }
+    },
+    "markdown.markdownItPlugins": true,
+    "markdown.previewScripts": [
+      "./dist/taipy-studio-gui-markdown-preview.js"
+    ]
   },
   "scripts": {
     "compile": "webpack",
@@ -86,6 +90,7 @@
   },
   "devDependencies": {
     "@types/glob": "^8.0.0",
+    "@types/markdown-it": "^12.2.3",
     "@types/mocha": "^10.0.0",
     "@types/node": "^18.11.15",
     "@types/string-similarity": "^4.0.0",
