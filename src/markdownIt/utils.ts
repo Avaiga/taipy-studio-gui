@@ -11,6 +11,11 @@
  * specific language governing permissions and limitations under the License.
  */
 
+import { l10n, window } from "vscode";
+import path from "path";
+import { existsSync, readFileSync } from "fs";
+import { getLog } from "../gui/logging";
+
 // export const camelize = (text: string): string => {
 //     const a = text.toLowerCase().replace(/[-_\s.]+(.)?/g, (_, c) => (c ? c.toUpperCase() : ""));
 //     return a.substring(0, 1).toLowerCase() + a.substring(1);
@@ -23,4 +28,32 @@ export const camelize = (text: string): string => {
         }
         return p1.toLowerCase();
     });
+};
+
+export const parseMockData = (value: string): string => {
+    if (!window.activeTextEditor?.document) {
+        return value;
+    }
+    const document = window.activeTextEditor.document;
+    const potentialMockFile = path.join(path.dirname(document.uri.fsPath), path.parse(document.fileName).name + ".mock.json");
+    if (!existsSync(potentialMockFile)) {
+        return value;
+    }
+    try {
+        const content = readFileSync(potentialMockFile, { encoding: "utf8", flag: "r" });
+        const mockContent = JSON.parse(content);
+        if (!mockContent?.data) {
+            return value;
+        }
+        const mockData = mockContent.data as Record<string, string>;
+        for (const [k, v] of Object.entries(mockData)) {
+            const searchString = `{${k}}`;
+            if (value.includes(searchString)) {
+                value = value.replace(new RegExp(searchString, "g"), v);
+            }
+        }
+    } catch (error: any) {
+        getLog().error(l10n.t("Parse mock data file: "), error.message || error);
+    }
+    return value;
 };

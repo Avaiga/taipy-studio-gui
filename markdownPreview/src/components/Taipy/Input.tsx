@@ -26,8 +26,8 @@ const Input = (props: InputProps) => {
                 value={props.defaultvalue}
                 label={props.label}
                 type={"text"}
-                // className={"defaultClass"}
-                // id={"ddddddddd"}
+                // className={""}
+                // id={""}
                 // onChange={handleInput}
                 // disabled={!active}
                 // onKeyDown={onAction ? handleAction : undefined}

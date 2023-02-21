@@ -17,6 +17,7 @@ import StateCore from "markdown-it/lib/rules_core/state_core";
 import { PLUGIN_NAME } from "./constant";
 import MarkdownIt from "markdown-it";
 import { processElement } from "../gui/diagnostics";
+import { parseMockData } from "./utils";
 
 const CONTROL_RE = /<\|(.*?)\|>/;
 const REPLACE_CONTROL_RE = RegExp(CONTROL_RE, "g");
@@ -60,7 +61,7 @@ const getTaipyToken = (content: string, tokenClass: typeof Token): Token[] => {
         token.markup = regexMatchResult?.at(1) || match;
         token.tag = e.type;
         token.attrs = e.properties.map((v) => [v.name, v.value]);
-        token.attrPush(["defaultValue", e.value]);
+        token.attrPush(["defaultValue", parseMockData(e.value)]);
         tokenNodes.push(token);
         lastPos = offset + match.length;
         return match;

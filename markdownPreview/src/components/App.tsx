@@ -37,6 +37,7 @@ const App = (props: AppProps) => {
                 allowUnknownElements={false}
                 renderError={renderError}
                 blacklistedAttrs={[]}
+                blacklistedTags={[]}
             />
         </>
     );
