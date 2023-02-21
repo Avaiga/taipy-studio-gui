@@ -14,6 +14,7 @@
 import { ComponentType } from "react";
 import JsxParser from "react-jsx-parser";
 import Input from "./Taipy/Input";
+import { renderError, unregisteredRender } from "./Taipy/Unregistered";
 
 interface AppProps {
     jxs: string;
@@ -32,6 +33,10 @@ const App = (props: AppProps) => {
                 disableKeyGeneration={true}
                 components={JSXSupportedComponent as Record<string, ComponentType>}
                 jsx={jxs}
+                renderUnrecognized={unregisteredRender}
+                allowUnknownElements={false}
+                renderError={renderError}
+                blacklistedAttrs={[]}
             />
         </>
     );
