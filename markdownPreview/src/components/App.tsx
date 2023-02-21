@@ -11,17 +11,28 @@
  * specific language governing permissions and limitations under the License.
  */
 
+import { ComponentType } from "react";
 import JsxParser from "react-jsx-parser";
+import Input from "./Taipy/Input";
 
 interface AppProps {
     jxs: string;
 }
 
+export const JSXSupportedComponent: Record<string, unknown> = {
+    "Taipy.Input": Input,
+};
+
 const App = (props: AppProps) => {
     const { jxs } = props;
     return (
         <>
-            <JsxParser disableKeyGeneration={true} jsx={jxs} />
+            <p>{jxs}</p>
+            <JsxParser
+                disableKeyGeneration={true}
+                components={JSXSupportedComponent as Record<string, ComponentType>}
+                jsx={jxs}
+            />
         </>
     );
 };

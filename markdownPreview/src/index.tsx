@@ -12,7 +12,8 @@
  */
 
 import { createRoot } from "react-dom/client";
-import App from "./app";
+import App from "./components/App";
+
 function init() {
     const newDiv = document.createElement("div", {});
     newDiv.setAttribute("id", "root");
@@ -22,7 +23,7 @@ function init() {
     const container = document.getElementById("root");
     if (container) {
         const root = createRoot(container);
-        root.render(<App />);
+        root.render(<App jxs={innerHTML} />);
     }
 }
 

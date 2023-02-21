@@ -1,0 +1,31 @@
+{
+  "name": "taipy-studio-gui-markdown-preview",
+  "description": "Markdown Preview Scripts for Visual Studio Code extension for Taipy Studio Gui",
+  "version": "0.0.1",
+  "scripts": {
+    "inst": "npm i --omit=optional",
+    "build": "webpack --mode development",
+    "prod": "webpack --mode production",
+    "watch": "webpack watch --mode development"
+  },
+  "devDependencies": {
+    "@types/react": "^18.0.18",
+    "@types/react-dom": "^18.0.6",
+    "@typescript-eslint/eslint-plugin": "^5.12.1",
+    "@typescript-eslint/parser": "^5.12.1",
+    "dotenv-webpack": "^8.0.1",
+    "eslint": "^8.9.0",
+    "path": "^0.12.7",
+    "ts-loader": "^9.2.6",
+    "typescript": "^4.8.4",
+    "webpack": "^5.69.1",
+    "webpack-cli": "^5.0.0"
+  },
+  "dependencies": {
+    "@emotion/styled": "^11.10.6",
+    "@mui/material": "^5.11.10",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-jsx-parser": "^1.29.0"
+  }
+}

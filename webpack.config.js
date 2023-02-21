@@ -77,14 +77,4 @@ const extensionConfig = {
     },
 };
 
-const previewConfig = {
-    ...extensionConfig,
-    entry: "./markdownPreview/index.ts",
-    output: {
-        path: path.resolve(__dirname, "dist"),
-        filename: "taipy-studio-gui-markdown-preview.js",
-        libraryTarget: "commonjs2",
-    },
-};
-
-module.exports = [extensionConfig, previewConfig];
+module.exports = [extensionConfig];
