@@ -11,18 +11,16 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { RenderRule } from "markdown-it/lib/renderer";
-import Token from "markdown-it/lib/token";
-import { camelize } from "./utils";
+// export const camelize = (text: string): string => {
+//     const a = text.toLowerCase().replace(/[-_\s.]+(.)?/g, (_, c) => (c ? c.toUpperCase() : ""));
+//     return a.substring(0, 1).toLowerCase() + a.substring(1);
+// };
 
-const renderRule: RenderRule = (tokens: Token[], idx: number): string => {
-    const token = tokens[idx];
-    const htmlString = `<taipy${token.tag.toLowerCase()} ${token.attrs
-        ?.map((v) => camelize(v[0]).toLowerCase() + "='" + v[1] + "'")
-        .join(" ")}/>`;
-    // console.log(token);
-    // console.log(htmlString);
-    return htmlString;
+export const camelize = (text: string): string => {
+    return text.replace(/^([A-Z])|[\s-_]+(\w)/g, function (match, p1, p2, offset) {
+        if (p2) {
+            return p2.toUpperCase();
+        }
+        return p1.toLowerCase();
+    });
 };
-
-export default renderRule;

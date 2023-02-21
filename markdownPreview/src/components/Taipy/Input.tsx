@@ -14,19 +14,20 @@
 import TextField from "@mui/material/TextField";
 import Tooltip from "@mui/material/Tooltip";
 interface InputProps {
-    defaultValue: string
+    defaultvalue: string;
+    label: string;
 }
 const Input = (props: InputProps) => {
     return (
-        <Tooltip title={""}>
+        <Tooltip title={"Input"}>
             <TextField
                 margin="dense"
                 hiddenLabel
-                value={props.defaultValue || "Hello"}
-                className={"defaultClass"}
+                value={props.defaultvalue}
+                label={props.label}
                 type={"text"}
-                id={"ddddddddd"}
-                // label={props.label}
+                // className={"defaultClass"}
+                // id={"ddddddddd"}
                 // onChange={handleInput}
                 // disabled={!active}
                 // onKeyDown={onAction ? handleAction : undefined}

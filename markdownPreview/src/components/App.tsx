@@ -21,7 +21,7 @@ interface AppProps {
 }
 
 export const JSXSupportedComponent: Record<string, unknown> = {
-    "Taipy.Input": Input,
+    taipyinput: Input,
 };
 
 const App = (props: AppProps) => {
