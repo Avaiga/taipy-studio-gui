@@ -11,21 +11,29 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { createRoot } from "react-dom/client";
-import App from "./app";
-function init() {
-    const newDiv = document.createElement("div", {});
-    newDiv.setAttribute("id", "root");
-    var innerHTML = document.body.innerHTML;
-    document.body.innerHTML = "";
-    document.body.appendChild(newDiv);
-    const container = document.getElementById("root");
-    if (container) {
-        const root = createRoot(container);
-        root.render(<App />);
-    }
+import React from 'react';
+import logo from './logo.svg';
+import './App.css';
+
+function App() {
+  return (
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p>
+          Edit <code>src/App.tsx</code> and save to reload.
+        </p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
+    </div>
+  );
 }
 
-window.addEventListener("vscode.markdown.updateContent", init);
-
-init();
+export default App;

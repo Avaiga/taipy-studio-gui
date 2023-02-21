@@ -11,21 +11,18 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { createRoot } from "react-dom/client";
-import App from "./app";
-function init() {
-    const newDiv = document.createElement("div", {});
-    newDiv.setAttribute("id", "root");
-    var innerHTML = document.body.innerHTML;
-    document.body.innerHTML = "";
-    document.body.appendChild(newDiv);
-    const container = document.getElementById("root");
-    if (container) {
-        const root = createRoot(container);
-        root.render(<App />);
-    }
-}
+import { ReportHandler } from 'web-vitals';
 
-window.addEventListener("vscode.markdown.updateContent", init);
+const reportWebVitals = (onPerfEntry?: ReportHandler) => {
+  if (onPerfEntry && onPerfEntry instanceof Function) {
+    import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
+      getCLS(onPerfEntry);
+      getFID(onPerfEntry);
+      getFCP(onPerfEntry);
+      getLCP(onPerfEntry);
+      getTTFB(onPerfEntry);
+    });
+  }
+};
 
-init();
+export default reportWebVitals;

@@ -11,21 +11,12 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { createRoot } from "react-dom/client";
-import App from "./app";
-function init() {
-    const newDiv = document.createElement("div", {});
-    newDiv.setAttribute("id", "root");
-    var innerHTML = document.body.innerHTML;
-    document.body.innerHTML = "";
-    document.body.appendChild(newDiv);
-    const container = document.getElementById("root");
-    if (container) {
-        const root = createRoot(container);
-        root.render(<App />);
-    }
-}
+import React from 'react';
+import { render, screen } from '@testing-library/react';
+import App from './App';
 
-window.addEventListener("vscode.markdown.updateContent", init);
-
-init();
+test('renders learn react link', () => {
+  render(<App />);
+  const linkElement = screen.getByText(/learn react/i);
+  expect(linkElement).toBeInTheDocument();
+});

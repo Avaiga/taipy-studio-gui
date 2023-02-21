@@ -26,9 +26,7 @@
     "workspaceContains:**/*.md",
     "workspaceContains:**/*.py",
     "onLanguage:python",
-    "onLanguage:markdown",
-    "onCommand:taipy.gui.md.generate",
-    "onCommand:taipy.gui.md.findElementFile"
+    "onLanguage:markdown"
   ],
   "main": "./dist/taipy-studio-gui.js",
   "capabilities": {
@@ -111,6 +109,7 @@
     "webpack-cli": "^5.0.0"
   },
   "dependencies": {
+    "markdown-it": "^13.0.1",
     "string-similarity": "^4.0.4"
   }
 }

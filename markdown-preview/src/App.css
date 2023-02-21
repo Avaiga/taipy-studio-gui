@@ -11,21 +11,41 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { createRoot } from "react-dom/client";
-import App from "./app";
-function init() {
-    const newDiv = document.createElement("div", {});
-    newDiv.setAttribute("id", "root");
-    var innerHTML = document.body.innerHTML;
-    document.body.innerHTML = "";
-    document.body.appendChild(newDiv);
-    const container = document.getElementById("root");
-    if (container) {
-        const root = createRoot(container);
-        root.render(<App />);
-    }
+.App {
+  text-align: center;
 }
 
-window.addEventListener("vscode.markdown.updateContent", init);
+.App-logo {
+  height: 40vmin;
+  pointer-events: none;
+}
 
-init();
+@media (prefers-reduced-motion: no-preference) {
+  .App-logo {
+    animation: App-logo-spin infinite 20s linear;
+  }
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+.App-link {
+  color: #61dafb;
+}
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}

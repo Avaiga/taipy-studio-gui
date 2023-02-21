@@ -11,21 +11,19 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { createRoot } from "react-dom/client";
-import App from "./app";
-function init() {
-    const newDiv = document.createElement("div", {});
-    newDiv.setAttribute("id", "root");
-    var innerHTML = document.body.innerHTML;
-    document.body.innerHTML = "";
-    document.body.appendChild(newDiv);
-    const container = document.getElementById("root");
-    if (container) {
-        const root = createRoot(container);
-        root.render(<App />);
-    }
+import JsxParser from "react-jsx-parser";
+
+interface AppProps {
+    jxs: string;
 }
 
-window.addEventListener("vscode.markdown.updateContent", init);
+const App = (props: AppProps) => {
+    const { jxs } = props;
+    return (
+        <>
+            <JsxParser disableKeyGeneration={true} jsx={jxs} />
+        </>
+    );
+};
 
-init();
+export default App;

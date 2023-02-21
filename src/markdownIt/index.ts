@@ -12,7 +12,15 @@
  */
 
 import { PluginSimple } from "markdown-it";
+import { PLUGIN_NAME } from "./constant";
+import ruleCoreGenerator from "./ruleCore";
+import renderRule from "./renderRule";
 
-export const markdownItTaipyStudioGui: PluginSimple = (md) => {
-    
+const markdownItPlugin: PluginSimple = (md) => {
+    // parse inline data to Taipy Gui tokens
+    md.core.ruler.after("linkify", PLUGIN_NAME, ruleCoreGenerator(md));
+    // rules to be executed when Taipy Gui token is found
+    md.renderer.rules[PLUGIN_NAME] = renderRule;
 };
+
+export default markdownItPlugin;

@@ -16,15 +16,18 @@
 import { ExtensionContext } from "vscode";
 import type MarkdownIt from 'markdown-it';
 import { GuiContext } from "./gui";
-import { markdownItTaipyStudioGui } from "./markdownIt";
+import MarkdownItStudioGui from "./markdownIt";
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export async function activate(context: ExtensionContext) {
     GuiContext.register(context);
+    // let md = require('markdown-it')().use(MarkdownItStudioGui);
+    // let result = md.render('<||>');
+    // console.log(result);
     return {
         extendMarkdownIt(md: MarkdownIt) {
-            return md.use(markdownItTaipyStudioGui);
+            return md.use(MarkdownItStudioGui);
         },
     };
 }

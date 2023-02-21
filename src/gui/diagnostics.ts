@@ -257,10 +257,10 @@ const getSectionDiagnostics = (diagnosticSection: DiagnosticSection): Diagnostic
     return diagnostics;
 };
 
-const processElement = (
+export const processElement = (
     s: string,
-    inlinePosition: Position,
-    initialPosition: Position,
+    inlinePosition: Position = new Position(0, 0),
+    initialPosition: Position = new Position(0, 0),
     symbols: SymbolInformation[] | undefined = undefined
 ): [Diagnostic[], TaipyElement] => {
     const d: Diagnostic[] = [];

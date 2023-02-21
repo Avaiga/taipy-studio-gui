@@ -11,21 +11,15 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { createRoot } from "react-dom/client";
-import App from "./app";
-function init() {
-    const newDiv = document.createElement("div", {});
-    newDiv.setAttribute("id", "root");
-    var innerHTML = document.body.innerHTML;
-    document.body.innerHTML = "";
-    document.body.appendChild(newDiv);
-    const container = document.getElementById("root");
-    if (container) {
-        const root = createRoot(container);
-        root.render(<App />);
-    }
-}
+import { RenderRule } from "markdown-it/lib/renderer";
+import Token from "markdown-it/lib/token";
 
-window.addEventListener("vscode.markdown.updateContent", init);
+const renderRule: RenderRule = (tokens: Token[], idx: number): string => {
+    const token = tokens[idx];
+    const htmlString = `<Taipy.${token.tag} ${token.attrs?.map((v) => v[0] + "='" + v[1] + "'").join(" ")}/>`;
+    console.log(token);
+    console.log(htmlString);
+    return htmlString;
+};
 
-init();
+export default renderRule;
