@@ -11,4 +11,4 @@ src/
 tests/
 tsconfig.json
 webpack.config.js
-webviews/
+markdownPreview/
