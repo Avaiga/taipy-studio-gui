@@ -28,7 +28,7 @@ const App = (props: AppProps) => {
     const { jxs } = props;
     return (
         <>
-            <p>{jxs}</p>
+            {/* <p>{jxs}</p> */}
             <JsxParser
                 disableKeyGeneration={true}
                 components={JSXSupportedComponent as Record<string, ComponentType>}
