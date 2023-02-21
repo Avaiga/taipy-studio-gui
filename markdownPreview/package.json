@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "scripts": {
     "inst": "npm i --omit=optional",
+    "inst-ci": "npm ci --omit=optional",
     "build": "webpack --mode development",
     "prod": "webpack --mode production",
     "watch": "webpack watch --mode development"
