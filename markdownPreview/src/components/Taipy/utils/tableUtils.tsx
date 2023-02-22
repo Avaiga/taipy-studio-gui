@@ -11,18 +11,24 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { RenderRule } from "markdown-it/lib/renderer";
-import Token from "markdown-it/lib/token";
-import { camelize } from "./utils";
+export type TableValueType = Record<string,any>[];
 
-const renderRule: RenderRule = (tokens: Token[], idx: number): string => {
-    const token = tokens[idx];
-    const htmlString = `<taipy_${token.tag.toLowerCase()} ${token.attrs
-        ?.map((v) => camelize(v[0]).toLowerCase() + "='" + v[1] + "'")
-        .join(" ")}/>`;
-    // console.log(token);
-    // console.log(htmlString);
-    return htmlString;
-};
+// Sample Data Format
+// const data: TableValueType = [
+//     { id: 1, lastName: "Snow", firstName: "Jon", age: 35 },
+//     { id: 2, lastName: "Lannister", firstName: null, age: 42 },
+// ];
 
-export default renderRule;
+export interface TaipyTableProps {
+    defaultvalue: string;
+    width?: string;
+    height?: string;
+    columns?: string;
+    pagesize?: number;
+}
+
+export interface TaipyPaginatedTableProps extends TaipyTableProps {
+    showall?: boolean;
+}
+
+export const DEFAULT_CELL_WIDTH = 180;

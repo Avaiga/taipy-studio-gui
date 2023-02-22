@@ -35,7 +35,8 @@ export const parseMockData = (value: string): string => {
         return value;
     }
     const document = window.activeTextEditor.document;
-    const potentialMockFile = path.join(path.dirname(document.uri.fsPath), path.parse(document.fileName).name + ".mock.json");
+    const basePath = path.dirname(document.uri.fsPath);
+    const potentialMockFile = path.join(basePath, path.parse(document.fileName).name + ".mock.json");
     if (!existsSync(potentialMockFile)) {
         return value;
     }
@@ -49,7 +50,13 @@ export const parseMockData = (value: string): string => {
         for (const [k, v] of Object.entries(mockData)) {
             const searchString = `{${k}}`;
             if (value.includes(searchString)) {
-                value = value.replace(new RegExp(searchString, "g"), v);
+                let replaceString = v;
+                const potentialDataFile = path.join(basePath, v);
+                if (existsSync(potentialDataFile)) {
+                    const dataFileContent = readFileSync(potentialDataFile, { encoding: "utf8", flag: "r" });
+                    replaceString = encodeURI(dataFileContent);
+                }
+                value = value.replace(new RegExp(searchString, "g"), replaceString);
             }
         }
     } catch (error: any) {

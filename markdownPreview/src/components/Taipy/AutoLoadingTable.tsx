@@ -11,18 +11,11 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { RenderRule } from "markdown-it/lib/renderer";
-import Token from "markdown-it/lib/token";
-import { camelize } from "./utils";
+import { TaipyTableProps } from "./utils/tableUtils";
 
-const renderRule: RenderRule = (tokens: Token[], idx: number): string => {
-    const token = tokens[idx];
-    const htmlString = `<taipy_${token.tag.toLowerCase()} ${token.attrs
-        ?.map((v) => camelize(v[0]).toLowerCase() + "='" + v[1] + "'")
-        .join(" ")}/>`;
-    // console.log(token);
-    // console.log(htmlString);
-    return htmlString;
+const AutoLoadingTable = (props: TaipyTableProps) => {
+    const { defaultvalue } = props;
+    return <></>;
 };
 
-export default renderRule;
+export default AutoLoadingTable;

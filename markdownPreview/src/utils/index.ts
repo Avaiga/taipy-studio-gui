@@ -11,4 +11,6 @@
  * specific language governing permissions and limitations under the License.
  */
 
-export {};
+import { getTextColor } from "./textColor";
+
+export { getTextColor };

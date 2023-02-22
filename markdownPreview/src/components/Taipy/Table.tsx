@@ -11,18 +11,15 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { RenderRule } from "markdown-it/lib/renderer";
-import Token from "markdown-it/lib/token";
-import { camelize } from "./utils";
+import AutoLoadingTable from "./AutoLoadingTable";
+import PaginatedTable from "./PaginatedTable";
+import { TaipyPaginatedTableProps } from "./utils/tableUtils";
 
-const renderRule: RenderRule = (tokens: Token[], idx: number): string => {
-    const token = tokens[idx];
-    const htmlString = `<taipy_${token.tag.toLowerCase()} ${token.attrs
-        ?.map((v) => camelize(v[0]).toLowerCase() + "='" + v[1] + "'")
-        .join(" ")}/>`;
-    // console.log(token);
-    // console.log(htmlString);
-    return htmlString;
-};
+interface TableProps extends TaipyPaginatedTableProps {
+    autoloading?: boolean;
+}
 
-export default renderRule;
+const Table = ({ autoloading = false, ...rest }: TableProps) =>
+    autoloading ? <AutoLoadingTable {...rest} /> : <PaginatedTable {...rest} />;
+
+export default Table;

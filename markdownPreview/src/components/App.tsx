@@ -11,9 +11,12 @@
  * specific language governing permissions and limitations under the License.
  */
 
+import { Box, createTheme, ThemeProvider } from "@mui/material";
 import { ComponentType } from "react";
 import JsxParser from "react-jsx-parser";
+import { getTextColor } from "../utils";
 import Input from "./Taipy/Input";
+import Table from "./Taipy/Table";
 import { renderError, unregisteredRender } from "./Taipy/Unregistered";
 
 interface AppProps {
@@ -21,24 +24,49 @@ interface AppProps {
 }
 
 export const JSXSupportedComponent: Record<string, unknown> = {
-    taipyinput: Input,
+    taipy_input: Input,
+    taipy_table: Table,
 };
+
+const defaultTextColor = getTextColor(document.body.style.backgroundColor);
+
+const mainSx = {
+    flexGrow: 1,
+    color: defaultTextColor,
+    bgcolor: document.body.style.backgroundColor,
+};
+const containerSx = { display: "flex" };
+
+const MuiTheme = createTheme({
+    typography: {
+        allVariants: {
+            color: defaultTextColor,
+        },
+    },
+});
 
 const App = (props: AppProps) => {
     const { jsx } = props;
+    const themeClass = "taipy-" + "dark";
     return (
         <>
             {/* <p>{jsx}</p> */}
-            <JsxParser
-                disableKeyGeneration={true}
-                components={JSXSupportedComponent as Record<string, ComponentType>}
-                jsx={jsx}
-                renderUnrecognized={unregisteredRender}
-                allowUnknownElements={false}
-                renderError={renderError}
-                blacklistedAttrs={[]}
-                blacklistedTags={[]}
-            />
+            <ThemeProvider theme={MuiTheme}>
+                <Box style={containerSx} className={themeClass}>
+                    <Box component="main" sx={mainSx}>
+                        <JsxParser
+                            disableKeyGeneration={true}
+                            components={JSXSupportedComponent as Record<string, ComponentType>}
+                            jsx={jsx}
+                            renderUnrecognized={unregisteredRender}
+                            allowUnknownElements={false}
+                            renderError={renderError}
+                            blacklistedAttrs={[]}
+                            blacklistedTags={[]}
+                        />
+                    </Box>
+                </Box>
+            </ThemeProvider>
         </>
     );
 };
