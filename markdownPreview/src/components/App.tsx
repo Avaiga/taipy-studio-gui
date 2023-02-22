@@ -17,7 +17,7 @@ import Input from "./Taipy/Input";
 import { renderError, unregisteredRender } from "./Taipy/Unregistered";
 
 interface AppProps {
-    jxs: string;
+    jsx: string;
 }
 
 export const JSXSupportedComponent: Record<string, unknown> = {
@@ -25,14 +25,14 @@ export const JSXSupportedComponent: Record<string, unknown> = {
 };
 
 const App = (props: AppProps) => {
-    const { jxs } = props;
+    const { jsx } = props;
     return (
         <>
-            {/* <p>{jxs}</p> */}
+            {/* <p>{jsx}</p> */}
             <JsxParser
                 disableKeyGeneration={true}
                 components={JSXSupportedComponent as Record<string, ComponentType>}
-                jsx={jxs}
+                jsx={jsx}
                 renderUnrecognized={unregisteredRender}
                 allowUnknownElements={false}
                 renderError={renderError}
