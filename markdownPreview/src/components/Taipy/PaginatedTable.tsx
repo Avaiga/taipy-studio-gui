@@ -17,7 +17,7 @@ import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
 const PaginatedTable = (props: TaipyPaginatedTableProps) => {
     const { defaultvalue, columns, height, width, pagesize } = props;
-    const data: TableValueType = defaultvalue ? (JSON.parse(decodeURI(defaultvalue)) as TableValueType) : [];
+    const data: TableValueType = defaultvalue ? (JSON.parse(decodeURIComponent(defaultvalue)) as TableValueType) : [];
     const columnList = columns ? columns.split(";") : data.length ? Object.keys(data[0]) : [];
     const columnDef: GridColDef[] = columnList.map((v) => {
         return { field: v, headerName: v, width: DEFAULT_CELL_WIDTH };

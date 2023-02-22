@@ -54,7 +54,7 @@ export const parseMockData = (value: string): string => {
                 const potentialDataFile = path.join(basePath, v);
                 if (existsSync(potentialDataFile)) {
                     const dataFileContent = readFileSync(potentialDataFile, { encoding: "utf8", flag: "r" });
-                    replaceString = encodeURI(dataFileContent);
+                    replaceString = encodeURIComponent(dataFileContent);
                 }
                 value = value.replace(new RegExp(searchString, "g"), replaceString);
             }
