@@ -22,9 +22,6 @@ import MarkdownItStudioGui from "./markdownIt";
 // Your extension is activated the very first time the command is executed
 export async function activate(context: ExtensionContext) {
     GuiContext.register(context);
-    // let md = require('markdown-it')().use(MarkdownItStudioGui);
-    // let result = md.render('<||>');
-    // console.log(result);
     return {
         extendMarkdownIt(md: MarkdownIt) {
             return md.use(MarkdownItStudioGui);

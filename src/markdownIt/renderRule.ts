@@ -20,8 +20,6 @@ const renderRule: RenderRule = (tokens: Token[], idx: number): string => {
     const htmlString = `<taipy_${token.tag.toLowerCase()} ${token.attrs
         ?.map((v) => camelize(v[0]).toLowerCase() + "='" + v[1] + "'")
         .join(" ")}/>`;
-    // console.log(token);
-    // console.log(htmlString);
     return htmlString;
 };
 

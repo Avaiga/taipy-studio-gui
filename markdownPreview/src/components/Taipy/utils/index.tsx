@@ -11,26 +11,9 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { TaipyBaseProps } from ".";
-
-export type TableValueType = Record<string, any>[];
-
-// Sample Data Format
-// const data: TableValueType = [
-//     { id: 1, lastName: "Snow", firstName: "Jon", age: 35 },
-//     { id: 2, lastName: "Lannister", firstName: null, age: 42 },
-// ];
-
-export interface TaipyTableProps extends TaipyBaseProps {
-    defaultvalue: string;
-    width?: string;
-    height?: string;
-    columns?: string;
-    pagesize?: number;
+export interface TaipyBaseProps {
+    id?: string;
+    libClassName?: string;
+    className?: string;
+    dynamicClassName?: string;
 }
-
-export interface TaipyPaginatedTableProps extends TaipyTableProps {
-    showall?: boolean;
-}
-
-export const DEFAULT_CELL_WIDTH = 180;

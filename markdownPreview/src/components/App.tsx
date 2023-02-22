@@ -49,25 +49,22 @@ const App = (props: AppProps) => {
     const { jsx } = props;
     const themeClass = "taipy-" + "dark";
     return (
-        <>
-            {/* <p>{jsx}</p> */}
-            <ThemeProvider theme={MuiTheme}>
-                <Box style={containerSx} className={themeClass}>
-                    <Box component="main" sx={mainSx}>
-                        <JsxParser
-                            disableKeyGeneration={true}
-                            components={JSXSupportedComponent as Record<string, ComponentType>}
-                            jsx={jsx}
-                            renderUnrecognized={unregisteredRender}
-                            allowUnknownElements={false}
-                            renderError={renderError}
-                            blacklistedAttrs={[]}
-                            blacklistedTags={[]}
-                        />
-                    </Box>
+        <ThemeProvider theme={MuiTheme}>
+            <Box style={containerSx} className={themeClass}>
+                <Box component="main" sx={mainSx}>
+                    <JsxParser
+                        disableKeyGeneration={true}
+                        components={JSXSupportedComponent as Record<string, ComponentType>}
+                        jsx={jsx}
+                        renderUnrecognized={unregisteredRender}
+                        allowUnknownElements={false}
+                        renderError={renderError}
+                        blacklistedAttrs={[]}
+                        blacklistedTags={[]}
+                    />
                 </Box>
-            </ThemeProvider>
-        </>
+            </Box>
+        </ThemeProvider>
     );
 };
 
