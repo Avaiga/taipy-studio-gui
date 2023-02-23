@@ -15,6 +15,7 @@ import { Box, createTheme, ThemeProvider } from "@mui/material";
 import { ComponentType } from "react";
 import JsxParser from "react-jsx-parser";
 import { getTextColor } from "../utils";
+import Chart from "./Taipy/Chart";
 import Input from "./Taipy/Input";
 import Table from "./Taipy/Table";
 import { renderError, unregisteredRender } from "./Taipy/Unregistered";
@@ -26,6 +27,7 @@ interface AppProps {
 export const JSXSupportedComponent: Record<string, unknown> = {
     taipy_input: Input,
     taipy_table: Table,
+    taipy_chart: Chart,
 };
 
 const defaultTextColor = getTextColor(document.body.style.backgroundColor);

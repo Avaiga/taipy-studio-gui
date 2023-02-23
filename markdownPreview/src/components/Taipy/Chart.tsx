@@ -11,25 +11,90 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { Box, Skeleton, Tooltip } from "@mui/material";
-import { lazy, Suspense } from "react";
+import { Box, Skeleton, Tooltip, Typography } from "@mui/material";
+import { Layout } from "plotly.js";
+import { CSSProperties, lazy, Suspense, useMemo, useRef } from "react";
 import { TaipyBaseProps } from "./utils";
 
-const Plot = lazy(() => import("react-plotly.js"));
+// const Plot = lazy(() => import("react-plotly.js"));
+
+import Plot from "react-plotly.js";
+import { TableValueType } from "./utils/tableUtils";
 
 interface ChartProps extends TaipyBaseProps {
+    defaultvalue: string;
     render?: boolean;
-    hoverText?: string;
-    testId?: string;
+    hovertext?: string;
+    width?: string | number;
+    height?: string | number;
+    mode?: string;
+    type?: string;
+    x?: string;
+    y?: string;
+    title?: string;
 }
 
+const defaultStyle = { position: "relative", display: "inline-block" };
+
 const Chart = (props: ChartProps) => {
-    const { render, hoverText } = props;
+    const {
+        render = true,
+        hovertext = "",
+        width = "100%",
+        height,
+        title = "Chart Title",
+        x,
+        y,
+        mode,
+        type,
+        defaultvalue,
+    } = props;
+    const style = useMemo(
+        () =>
+            height === undefined
+                ? ({ ...defaultStyle, width: width } as CSSProperties)
+                : ({ ...defaultStyle, width: width, height: height } as CSSProperties),
+        [width, height]
+    );
+    const skelStyle = useMemo(() => ({ ...style, minHeight: "7em" }), [style]);
+    const data: TableValueType = defaultvalue ? (JSON.parse(decodeURIComponent(defaultvalue)) as TableValueType) : [];
+    const columnList = Object.keys(data.at(0) || []);
+    if (data.length === 0 || columnList.length < 2) {
+        return (
+            <>
+                <Typography>Invalid data for taipy chart</Typography>
+                <Skeleton key="skeleton" sx={skelStyle} />
+            </>
+        );
+    }
+    const xCol = x || columnList[0];
+    const yCol = y || columnList[1];
+    const plotRef = useRef<HTMLDivElement>(null);
+    const dataPl: Plotly.Data[] = [
+        {
+            x: data.map((v) => v[xCol]),
+            y: data.map((v) => v[yCol]),
+            type: (type as any) || "scatter",
+            mode: (mode as any) || "lines+markers",
+        },
+    ];
+    const layout = useMemo(() => {
+        return {
+            title: title,
+            xaxis: {
+                title: xCol,
+            },
+            yaxis: {
+                title: yCol,
+            },
+            clickmode: "event+select",
+        } as Layout;
+    }, []);
     return render ? (
-        <Box id={props.id} key="div" data-testid={props.testId} className={props.className} ref={plotRef}>
-            <Tooltip title={hoverText || ""}>
+        <Box id={props.id} key="div" className={props.className} ref={plotRef}>
+            <Tooltip title={hovertext}>
                 <Suspense fallback={<Skeleton key="skeleton" sx={skelStyle} />}>
-                    <Plot data={dataPl} layout={layout} style={style} config={plotConfig} />
+                    <Plot data={dataPl} layout={layout} style={style} config={{ staticPlot: true }} />
                 </Suspense>
             </Tooltip>
         </Box>
