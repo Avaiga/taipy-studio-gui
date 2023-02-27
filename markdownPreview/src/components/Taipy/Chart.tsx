@@ -57,12 +57,18 @@ const Chart = (props: ChartProps) => {
         [width, height]
     );
     const skelStyle = useMemo(() => ({ ...style, minHeight: "7em" }), [style]);
-    const data: TableValueType = defaultvalue ? (JSON.parse(decodeURIComponent(defaultvalue)) as TableValueType) : [];
+    let data: TableValueType = [];
+    try {
+        if (defaultvalue) {
+            const jsonData = JSON.parse(decodeURIComponent(defaultvalue)) as TableValueType;
+            data = jsonData;
+        }
+    } catch (e) {}
     const columnList = Object.keys(data.at(0) || []);
     if (data.length === 0 || columnList.length < 2) {
         return (
             <>
-                <Typography>Invalid data for taipy chart</Typography>
+                {/* <Typography>Invalid data for taipy chart</Typography> */}
                 <Skeleton key="skeleton" sx={skelStyle} />
             </>
         );
