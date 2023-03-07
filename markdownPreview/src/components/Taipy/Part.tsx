@@ -11,26 +11,20 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import TextField from "@mui/material/TextField";
-import Tooltip from "@mui/material/Tooltip";
-interface InputProps {
-    defaultvalue: string;
-    label: string;
+import { ReactNode } from "react";
+import Box from "@mui/material/Box";
+
+import { TaipyBaseProps } from "./utils";
+
+interface PartProps extends TaipyBaseProps {
+    render?: boolean;
+    children?: ReactNode;
 }
-const Input = (props: InputProps) => {
-    return (
-        <Tooltip title={"Input"}>
-            <TextField
-                margin="dense"
-                hiddenLabel
-                value={props.defaultvalue}
-                label={props.label}
-                type={"text"}
-                // multiline={multiline}
-                // minRows={linesShown}
-            />
-        </Tooltip>
-    );
+
+const Part = (props: PartProps) => {
+    const { render = true, children } = props;
+
+    return render ? <Box>{children}</Box> : null;
 };
 
-export default Input;
+export default Part;

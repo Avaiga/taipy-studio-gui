@@ -16,29 +16,58 @@ import Token from "markdown-it/lib/token";
 import StateCore from "markdown-it/lib/rules_core/state_core";
 import { PLUGIN_NAME } from "./constant";
 import MarkdownIt from "markdown-it";
-import { processElement } from "../gui/diagnostics";
+import { buildEmptyTaipyElement, CLOSING_TAG_RE, CONTROL_RE, OPENING_TAG_RE, processElement } from "../gui/diagnostics";
 import { parseMockData } from "./utils";
 
-const CONTROL_RE = /<\|(.*?)\|>/;
 const REPLACE_CONTROL_RE = RegExp(CONTROL_RE, "g");
+const REPLACE_OPENING_TAG_RE = RegExp(OPENING_TAG_RE, "g");
+const REPLACE_CLOSING_TAG_RE = RegExp(CLOSING_TAG_RE, "g");
 
 const getTaipyReplace = (md: MarkdownIt) => {
     const arrayReplaceAt = md.utils.arrayReplaceAt;
     const taipyReplace: RuleCore = (state: StateCore) => {
         const tokens: Token[] = state.tokens;
+        const tagQueue: string[] = [];
         for (let j = 0; j < tokens.length; j++) {
             if (tokens[j].type !== "inline") {
+                if (tagQueue.length > 0 && (tokens[j].type === "paragraph_open" || tokens[j].type === "paragraph_close")) {
+                    tokens.splice(j, 1);
+                    j--;
+                }
                 continue;
             }
             const childTokens: Token[] = tokens[j].children || [];
-            if (childTokens.length === 0) {
-                continue;
-            }
             for (let i = 0; i < childTokens.length; i++) {
                 const token: Token = childTokens[i];
-                if (token.type === "text" && CONTROL_RE.test(token.content)) {
-                    // replace current token (inline) with Taipy Gui tokens
-                    tokens[j].children = arrayReplaceAt(childTokens, i, getTaipyToken(token.content, state.Token));
+                if (token.type === "text") {
+                    const openingTagSearch = OPENING_TAG_RE.exec(token.content);
+                    if (openingTagSearch) {
+                        let element = buildEmptyTaipyElement();
+                        element.type = "part";
+                        const openingTagProperty = openingTagSearch[2];
+                        if (openingTagProperty) {
+                            const [_, e] = processElement(openingTagProperty);
+                            element = e;
+                        }
+                        tokens[j].children = arrayReplaceAt(
+                            childTokens,
+                            i,
+                            getOpeningToken(token.content, state.Token)
+                        );
+                        tagQueue.push(element.type);
+                        continue;
+                    }
+                    if (CONTROL_RE.test(token.content)) {
+                        tokens[j].children = arrayReplaceAt(childTokens, i, getControlToken(token.content, state.Token));
+                        continue;
+                    }
+                    if (CLOSING_TAG_RE.exec(token.content)) {
+                        tokens[j].children = arrayReplaceAt(
+                            childTokens,
+                            i,
+                            getClosingToken(token.content, tagQueue.pop() || "part", state.Token)
+                        );
+                    }
                 }
             }
         }
@@ -46,7 +75,36 @@ const getTaipyReplace = (md: MarkdownIt) => {
     return taipyReplace;
 };
 
-const getTaipyToken = (content: string, tokenClass: typeof Token): Token[] => {
+const getOpeningToken = (content: string, tokenClass: typeof Token): Token[] => {
+    let tokenNodes: Token[] = [],
+        lastPos = 0;
+    content.replace(REPLACE_OPENING_TAG_RE, (match: string, offset: number): string => {
+        const regexMatchResult = OPENING_TAG_RE.exec(match);
+        if (offset > lastPos) {
+            let token = new tokenClass("text", "", 0);
+            token.content = content.slice(lastPos, offset);
+            tokenNodes.push(token);
+        }
+        const [_, e] = processElement(regexMatchResult?.at(2) || match);
+        let token = new tokenClass(PLUGIN_NAME, "", 1);
+        token.block = true;
+        token.markup = regexMatchResult?.at(2) || match;
+        token.tag = e.type === "text" ? "part" : e.type;
+        token.attrs = e.properties.map((v) => [v.name, v.value]);
+        token.attrPush(["defaultValue", parseMockData(e.value)]);
+        tokenNodes.push(token);
+        lastPos = offset + match.length;
+        return match;
+    });
+    if (lastPos < content.length) {
+        let token = new tokenClass("text", "", 0);
+        token.content = content.slice(lastPos);
+        tokenNodes.push(token);
+    }
+    return tokenNodes;
+};
+
+const getControlToken = (content: string, tokenClass: typeof Token): Token[] => {
     let tokenNodes: Token[] = [],
         lastPos = 0;
     content.replace(REPLACE_CONTROL_RE, (match: string, offset: number): string => {
@@ -56,12 +114,38 @@ const getTaipyToken = (content: string, tokenClass: typeof Token): Token[] => {
             token.content = content.slice(lastPos, offset);
             tokenNodes.push(token);
         }
-        const [d, e] = processElement(regexMatchResult?.at(1) || match);
+        const [_, e] = processElement(regexMatchResult?.at(1) || match);
         let token = new tokenClass(PLUGIN_NAME, "", 0);
         token.markup = regexMatchResult?.at(1) || match;
         token.tag = e.type;
+        token.nesting = 0;
         token.attrs = e.properties.map((v) => [v.name, v.value]);
         token.attrPush(["defaultValue", parseMockData(e.value)]);
+        tokenNodes.push(token);
+        lastPos = offset + match.length;
+        return match;
+    });
+    if (lastPos < content.length) {
+        let token = new tokenClass("text", "", 0);
+        token.content = content.slice(lastPos);
+        tokenNodes.push(token);
+    }
+    return tokenNodes;
+};
+
+const getClosingToken = (content: string, tag: string, tokenClass: typeof Token): Token[] => {
+    let tokenNodes: Token[] = [],
+        lastPos = 0;
+    content.replace(REPLACE_CLOSING_TAG_RE, (match: string, offset: number): string => {
+        if (offset > lastPos) {
+            let token = new tokenClass("text", "", 0);
+            token.content = content.slice(lastPos, offset);
+            tokenNodes.push(token);
+        }
+        let token = new tokenClass(PLUGIN_NAME, "", -1);
+        token.markup = match;
+        token.block = true;
+        token.tag = tag;
         tokenNodes.push(token);
         lastPos = offset + match.length;
         return match;

@@ -16,7 +16,10 @@ import { ComponentType } from "react";
 import JsxParser from "react-jsx-parser";
 import { getTextColor } from "../utils";
 import Chart from "./Taipy/Chart";
+import Expandable from "./Taipy/Expandable";
 import Input from "./Taipy/Input";
+import Pane from "./Taipy/Pane";
+import Part from "./Taipy/Part";
 import Table from "./Taipy/Table";
 import { renderError, unregisteredRender } from "./Taipy/Unregistered";
 
@@ -28,6 +31,9 @@ export const JSXSupportedComponent: Record<string, unknown> = {
     taipy_input: Input,
     taipy_table: Table,
     taipy_chart: Chart,
+    taipy_part: Part,
+    taipy_expandable: Expandable,
+    taipy_pane: Pane,
 };
 
 const defaultTextColor = getTextColor(document.body.style.backgroundColor);

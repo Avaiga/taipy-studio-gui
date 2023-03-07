@@ -17,10 +17,16 @@ import { camelize } from "./utils";
 
 const renderRule: RenderRule = (tokens: Token[], idx: number): string => {
     const token = tokens[idx];
-    const htmlString = `<taipy_${token.tag.toLowerCase()} ${token.attrs
+    const jsxString = `taipy_${token.tag.toLowerCase()} ${token.attrs
         ?.map((v) => camelize(v[0]).toLowerCase() + "='" + v[1] + "'")
-        .join(" ")}/>`;
-    return htmlString;
+        .join(" ")}`;
+    if (token.nesting === 0) {
+        return `<${jsxString}/>`;
+    }
+    if (token.nesting === 1) {
+        return `<${jsxString}>`;
+    }
+    return `</taipy_${token.tag.toLowerCase()}>`;
 };
 
 export default renderRule;

@@ -31,9 +31,9 @@ import { findBestMatch } from "string-similarity";
 import { LanguageId } from "./constant";
 import { ElementProvider } from "./elementProvider";
 
-const CONTROL_RE = /<\|(.*?)\|>/;
-const OPENING_TAG_RE = /<([0-9a-zA-Z\_\.]*)\|((?:(?!\|>).)*)\s*$/;
-const CLOSING_TAG_RE = /^\s*\|([0-9a-zA-Z\_\.]*)>/;
+export const CONTROL_RE = /<\|(.*?)\|>/;
+export const OPENING_TAG_RE = /<([0-9a-zA-Z\_\.]*)\|((?:(?!\|>).)*)\s*$/;
+export const CLOSING_TAG_RE = /^\s*\|([0-9a-zA-Z\_\.]*)>/;
 const SPLIT_RE = /(?<!\\\\)\|/;
 export const PROPERTY_RE = /((?:don'?t|not)\s+)?([a-zA-Z][\.a-zA-Z_$0-9]*(?:\[(?:.*?)\])?)\s*(?:=(.*))?$/;
 export const PROPERTY_NAME_RE = /([a-zA-Z][\.a-zA-Z_$0-9]*)(?:\[(.*?)\])?/;
@@ -56,7 +56,7 @@ interface TaipyElement {
     properties: TaipyElementProperty[];
 }
 
-const buildEmptyTaipyElement = (): TaipyElement => {
+export const buildEmptyTaipyElement = (): TaipyElement => {
     return { value: "", type: "", properties: [] };
 };
 
