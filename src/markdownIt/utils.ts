@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { l10n, window, workspace } from "vscode";
+import { l10n, workspace } from "vscode";
 import path from "path";
 import { existsSync, readFileSync } from "fs";
 import { getLog } from "../gui/logging";
