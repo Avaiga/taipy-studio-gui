@@ -31,20 +31,10 @@ export const camelize = (text: string): string => {
 };
 
 export const parseMockData = (value: string): string => {
-    if (
-        !window.activeTextEditor?.document &&
-        (!workspace.workspaceFolders || workspace.workspaceFolders.length === 0)
-    ) {
+    if (!workspace.workspaceFolders || workspace.workspaceFolders.length === 0) {
         return value;
     }
-    const basePath = window.activeTextEditor?.document
-        ? path.dirname(window.activeTextEditor.document.uri.fsPath)
-        : workspace.workspaceFolders
-        ? workspace.workspaceFolders[0].uri.fsPath
-        : null;
-    if (!basePath) {
-        return value;
-    }
+    const basePath = workspace.workspaceFolders[0].uri.fsPath;
     // const potentialMockFile = path.join(basePath, path.parse(document.fileName).name + ".mock.json");
     const potentialMockFile = path.join(basePath, "taipy.mock.json");
     if (!existsSync(potentialMockFile)) {
