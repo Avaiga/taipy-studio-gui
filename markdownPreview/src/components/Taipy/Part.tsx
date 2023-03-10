@@ -15,16 +15,17 @@ import { ReactNode } from "react";
 import Box from "@mui/material/Box";
 
 import { TaipyBaseProps } from "./utils";
+import { parseBooleanProperty } from "./utils/booleanUtils";
 
 interface PartProps extends TaipyBaseProps {
-    render?: boolean;
+    render?: string;
     children?: ReactNode;
 }
 
 const Part = (props: PartProps) => {
-    const { render = true, children } = props;
-
-    return render ? <Box>{children}</Box> : null;
+    const { render = "True", children } = props;
+    
+    return parseBooleanProperty(render) ? <Box>{children}</Box> : null;
 };
 
 export default Part;

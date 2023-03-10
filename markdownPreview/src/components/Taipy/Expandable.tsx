@@ -16,19 +16,20 @@ import Accordion from "@mui/material/Accordion";
 import AccordionSummary from "@mui/material/AccordionSummary";
 import AccordionDetails from "@mui/material/AccordionDetails";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import { parseBooleanProperty } from "./utils/booleanUtils";
 
 interface ExpandableProps {
-    expanded?: boolean;
+    expanded?: string;
     children?: ReactNode;
     defaultvalue?: string;
 }
 
 const Expandable = (props: ExpandableProps) => {
-    const { expanded = true, defaultvalue } = props;
-    const [opened, setOpened] = useState(expanded);
+    const { expanded = "True", defaultvalue } = props;
+    const [opened, setOpened] = useState(parseBooleanProperty(expanded));
 
     useEffect(() => {
-        expanded !== undefined && setOpened(expanded);
+        expanded !== undefined && setOpened(parseBooleanProperty(expanded));
     }, [expanded]);
 
     const onChange = useCallback(() => setOpened((op) => !op), []);

@@ -20,10 +20,11 @@ import { TaipyBaseProps } from "./utils";
 
 import Plot from "react-plotly.js";
 import { TableValueType } from "./utils/tableUtils";
+import { parseBooleanProperty } from "./utils/booleanUtils";
 
 interface ChartProps extends TaipyBaseProps {
     defaultvalue: string;
-    render?: boolean;
+    render?: string;
     hovertext?: string;
     width?: string | number;
     height?: string | number;
@@ -38,7 +39,7 @@ const defaultStyle = { position: "relative", display: "inline-block" };
 
 const Chart = (props: ChartProps) => {
     const {
-        render = true,
+        render = "True",
         hovertext = "",
         width = "100%",
         height,
@@ -96,7 +97,7 @@ const Chart = (props: ChartProps) => {
             clickmode: "event+select",
         } as Layout;
     }, []);
-    return render ? (
+    return parseBooleanProperty(render) ? (
         <Box id={props.id} key="div" className={props.className} ref={plotRef}>
             <Tooltip title={hovertext}>
                 <Suspense fallback={<Skeleton key="skeleton" sx={skelStyle} />}>
