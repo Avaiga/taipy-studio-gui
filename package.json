@@ -18,7 +18,7 @@
   "icon": "assets/taipy-logo.png",
   "l10n": "./dist/l10n",
   "categories": [
-    "Linters", 
+    "Linters",
     "Data Science",
     "Other"
   ],
@@ -26,9 +26,7 @@
     "workspaceContains:**/*.md",
     "workspaceContains:**/*.py",
     "onLanguage:python",
-    "onLanguage:markdown",
-    "onCommand:taipy.gui.md.generate",
-    "onCommand:taipy.gui.md.findElementFile"
+    "onLanguage:markdown"
   ],
   "main": "./dist/taipy-studio-gui.js",
   "capabilities": {
@@ -70,9 +68,14 @@
           "description": "%taipyStudio.gUI.elementsFilePath.description%"
         }
       }
-    }
+    },
+    "markdown.markdownItPlugins": true,
+    "markdown.previewScripts": [
+      "./dist/taipy-studio-gui-markdown-preview.js"
+    ]
   },
   "scripts": {
+    "build": "npm run compile && cd markdownPreview && npm run build",
     "compile": "webpack",
     "watch": "webpack --watch",
     "package": "webpack --mode production --devtool hidden-source-map && vsce package",
@@ -86,6 +89,7 @@
   },
   "devDependencies": {
     "@types/glob": "^8.0.0",
+    "@types/markdown-it": "^12.2.3",
     "@types/mocha": "^10.0.0",
     "@types/node": "^18.11.15",
     "@types/string-similarity": "^4.0.0",
@@ -106,6 +110,7 @@
     "webpack-cli": "^5.0.0"
   },
   "dependencies": {
+    "markdown-it": "^13.0.1",
     "string-similarity": "^4.0.4"
   }
 }
