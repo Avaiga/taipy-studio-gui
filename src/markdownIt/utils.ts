@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { l10n, window } from "vscode";
+import { l10n, window, workspace } from "vscode";
 import path from "path";
 import { existsSync, readFileSync } from "fs";
 import { getLog } from "../gui/logging";
@@ -31,29 +31,45 @@ export const camelize = (text: string): string => {
 };
 
 export const parseMockData = (value: string): string => {
-    if (!window.activeTextEditor?.document) {
+    if (
+        !window.activeTextEditor?.document &&
+        (!workspace.workspaceFolders || workspace.workspaceFolders.length === 0)
+    ) {
         return value;
     }
-    const document = window.activeTextEditor.document;
-    const basePath = path.dirname(document.uri.fsPath);
-    const potentialMockFile = path.join(basePath, path.parse(document.fileName).name + ".mock.json");
+    const basePath = window.activeTextEditor?.document
+        ? path.dirname(window.activeTextEditor.document.uri.fsPath)
+        : workspace.workspaceFolders
+        ? workspace.workspaceFolders[0].uri.fsPath
+        : null;
+    if (!basePath) {
+        return value;
+    }
+    // const potentialMockFile = path.join(basePath, path.parse(document.fileName).name + ".mock.json");
+    const potentialMockFile = path.join(basePath, "taipy.mock.json");
     if (!existsSync(potentialMockFile)) {
         return value;
     }
     try {
-        const content = readFileSync(potentialMockFile, { encoding: "utf8", flag: "r" });
+        const content = readFileSync(potentialMockFile, {
+            encoding: "utf8",
+            flag: "r",
+        });
         const mockContent = JSON.parse(content);
         if (!mockContent?.data) {
             return value;
         }
-        const mockData = mockContent.data as Record<string, string>;
+        const mockData = mockContent as Record<string, string>;
         for (const [k, v] of Object.entries(mockData)) {
             const searchString = `{${k}}`;
             if (value.includes(searchString)) {
                 let replaceString = v;
                 const potentialDataFile = path.join(basePath, v);
                 if (existsSync(potentialDataFile)) {
-                    const dataFileContent = readFileSync(potentialDataFile, { encoding: "utf8", flag: "r" });
+                    const dataFileContent = readFileSync(potentialDataFile, {
+                        encoding: "utf8",
+                        flag: "r",
+                    });
                     replaceString = encodeURIComponent(dataFileContent);
                 }
                 value = value.replace(new RegExp(searchString, "g"), replaceString);
