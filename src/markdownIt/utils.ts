@@ -35,7 +35,6 @@ export const parseMockData = (value: string): string => {
         return value;
     }
     const basePath = workspace.workspaceFolders[0].uri.fsPath;
-    // const potentialMockFile = path.join(basePath, path.parse(document.fileName).name + ".mock.json");
     const potentialMockFile = path.join(basePath, "taipy.mock.json");
     if (!existsSync(potentialMockFile)) {
         return value;
