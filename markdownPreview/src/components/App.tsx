@@ -18,6 +18,7 @@ import { getTextColor } from "../utils";
 import Chart from "./Taipy/Chart";
 import Expandable from "./Taipy/Expandable";
 import Input from "./Taipy/Input";
+import Layout from "./Taipy/Layout";
 import Pane from "./Taipy/Pane";
 import Part from "./Taipy/Part";
 import Table from "./Taipy/Table";
@@ -34,6 +35,7 @@ export const JSXSupportedComponent: Record<string, unknown> = {
     taipy_part: Part,
     taipy_expandable: Expandable,
     taipy_pane: Pane,
+    taipy_layout: Layout,
 };
 
 const defaultTextColor = getTextColor(document.body.style.backgroundColor);
