@@ -15,10 +15,13 @@ import { Box, createTheme, ThemeProvider } from "@mui/material";
 import { ComponentType } from "react";
 import JsxParser from "react-jsx-parser";
 import { getTextColor } from "../utils";
+import Button from "./Taipy/Button";
 import Chart from "./Taipy/Chart";
 import Expandable from "./Taipy/Expandable";
+import Field from "./Taipy/Field";
 import Input from "./Taipy/Input";
 import Layout from "./Taipy/Layout";
+import Number from "./Taipy/Number";
 import Pane from "./Taipy/Pane";
 import Part from "./Taipy/Part";
 import Table from "./Taipy/Table";
@@ -29,6 +32,9 @@ interface AppProps {
 }
 
 export const JSXSupportedComponent: Record<string, unknown> = {
+    taipy_text: Field,
+    taipy_button: Button,
+    taipy_number: Number,
     taipy_input: Input,
     taipy_table: Table,
     taipy_chart: Chart,

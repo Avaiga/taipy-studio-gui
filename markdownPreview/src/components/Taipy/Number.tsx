@@ -18,8 +18,8 @@ interface InputProps {
     defaultvalue: string;
     label: string;
 }
-const Input = (props: InputProps) => {
-    const [value, setValue] = useState(props.defaultvalue);
+const Number = (props: InputProps) => {
+    const [value, setValue] = useState(parseInt(props.defaultvalue) || 0);
     return (
         <Tooltip title={"Input"}>
             <TextField
@@ -27,8 +27,8 @@ const Input = (props: InputProps) => {
                 hiddenLabel
                 value={value}
                 label={props.label}
-                type={"text"}
-                onChange={(e) => setValue(e.target.value)}
+                type={"number"}
+                onChange={(e) => setValue(parseInt(e.target.value) || 0)}
                 // multiline={multiline}
                 // minRows={linesShown}
             />
@@ -36,4 +36,4 @@ const Input = (props: InputProps) => {
     );
 };
 
-export default Input;
+export default Number;
