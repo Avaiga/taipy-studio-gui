@@ -62,7 +62,7 @@ const userTheme = {
 
 const App = (props: AppProps) => {
     const { jsx } = props;
-    const [theme, setTheme] = useState<PaletteMode>("dark");
+    const [theme, setTheme] = useState<PaletteMode>(document.body.classList.contains('vscode-dark') ? "dark" : "light");
     const themeClass = `taipy-${theme}`;
     const MuiTheme = userTheme[theme];
     return (
