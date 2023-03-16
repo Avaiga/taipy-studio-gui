@@ -1,0 +1,14 @@
+:root {
+    --color-primary: #ff462b;
+    --color-secondary: #283282;
+    --color-error: #ff595e;
+    --color-warning: #faa916;
+    --color-success: #96e6b3;
+    --color-background-light: #f1f1f1;
+    --color-paper-light: #ffffff;
+    --color-background-dark: #051924;
+    --color-paper-dark: #072636;
+    --font-family: Lato, Arial, sans-serif;
+    --border-radius: 8px;
+    --input-button-height: 48px;
+}

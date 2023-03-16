@@ -14,6 +14,7 @@
 //@ts-check
 'use strict';
 
+const CopyPlugin = require('copy-webpack-plugin');
 const path = require('path');
 
 /**@type {import('webpack').Configuration}*/
@@ -22,8 +23,8 @@ const config = (env, argv) => ({
 
   entry: {"taipy-studio-gui-markdown-preview": "./src/index.tsx"}, // the entry point of this extension, 📖 -> https://webpack.js.org/configuration/entry-context/
   output: { // https://webpack.js.org/configuration/output/
-    path: path.resolve(__dirname, '../dist'),
-    filename: '[name].js',
+    path: path.resolve(__dirname, '../dist/markdownPreview'),
+    filename: 'index.js',
     libraryTarget: 'umd',
   },
   devtool: argv.mode === "development" && 'inline-source-map',
@@ -43,6 +44,16 @@ const config = (env, argv) => ({
         ]
       },
     ]
-  }
+  },
+  plugins: [
+    new CopyPlugin({
+        patterns: [
+            {
+                from: path.resolve(__dirname, "public"),
+                to: path.resolve(__dirname, '../dist/markdownPreview'),
+            },
+        ],
+    }),
+],
 });
 module.exports = config;

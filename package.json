@@ -70,8 +70,11 @@
       }
     },
     "markdown.markdownItPlugins": true,
+    "markdown.previewStyles": [
+      "./dist/markdownPreview/css/style.css"
+    ],
     "markdown.previewScripts": [
-      "./dist/taipy-studio-gui-markdown-preview.js"
+      "./dist/markdownPreview/index.js"
     ]
   },
   "scripts": {

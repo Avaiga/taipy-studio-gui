@@ -11,20 +11,15 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import MuiButton from "@mui/material/Button";
+/**************************************************************
 
-interface ButtonProps {
-    defaultvalue?: string;
+                   CONTAINER
+
+***************************************************************/
+
+.container {
+    margin-left: auto;
+    margin-right: auto;
+    width: calc(100% - (var(--spacing1) * 2));
+    max-width: var(--container-max-width);
 }
-
-const Button = (props: ButtonProps) => {
-    const { defaultvalue = "Taipy" } = props;
-
-    return (
-        <MuiButton className="taipy-button" variant="outlined">
-            {defaultvalue || "Taipy"}
-        </MuiButton>
-    );
-};
-
-export default Button;

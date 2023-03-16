@@ -11,20 +11,44 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import MuiButton from "@mui/material/Button";
+/**************************************************************
 
-interface ButtonProps {
-    defaultvalue?: string;
+                   MISCELLANEOUS UTILITIES
+
+***************************************************************/
+
+/***** Visibility *****/
+
+.d-none {
+    display: none !important;
 }
 
-const Button = (props: ButtonProps) => {
-    const { defaultvalue = "Taipy" } = props;
+.d-flex {
+    display: flex !important;
+}
 
-    return (
-        <MuiButton className="taipy-button" variant="outlined">
-            {defaultvalue || "Taipy"}
-        </MuiButton>
-    );
-};
+.d-block {
+    display: block !important;
+}
 
-export default Button;
+.d-inline {
+    display: inline !important;
+}
+
+.d-inline-block {
+    display: inline-block !important;
+}
+
+/***** Opacity *****/
+
+.transparent {
+    opacity: 0 !important;
+}
+
+.half-transparent {
+    opacity: 0.5 !important;
+}
+
+.opaque {
+    opacity: 1 !important;
+}

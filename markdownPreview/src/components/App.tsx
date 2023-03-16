@@ -11,12 +11,12 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { Box, createTheme, ThemeProvider } from "@mui/material";
+import { Box, PaletteMode, ThemeProvider } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
+import GlobalStyles from "@mui/material/GlobalStyles";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { ComponentType } from "react";
+import { ComponentType, useState } from "react";
 import JsxParser from "react-jsx-parser";
-import { getTextColor } from "../utils";
 import Button from "./Taipy/Button";
 import Chart from "./Taipy/Chart";
 import DateSelector from "./Taipy/DateSelector";
@@ -29,6 +29,7 @@ import Pane from "./Taipy/Pane";
 import Part from "./Taipy/Part";
 import Table from "./Taipy/Table";
 import { renderError, unregisteredRender } from "./Taipy/Unregistered";
+import { getUserTheme } from "./themes";
 
 interface AppProps {
     jsx: string;
@@ -48,65 +49,44 @@ export const JSXSupportedComponent: Record<string, unknown> = {
     taipy_date: DateSelector,
 };
 
-const defaultTextColor = getTextColor(document.body.style.backgroundColor);
-
 const mainSx = {
     flexGrow: 1,
-    color: defaultTextColor,
-    bgcolor: document.body.style.backgroundColor,
+    bgcolor: "background.default",
 };
 const containerSx = { display: "flex" };
 
-const MuiTheme = createTheme({
-    typography: {
-        allVariants: {
-            color: defaultTextColor,
-        },
-    },
-    components: {
-        MuiInputBase: {
-            styleOverrides: {
-                root: {
-                    color: defaultTextColor,
-                },
-            },
-        },
-        MuiOutlinedInput: {
-            styleOverrides: {
-                root: {
-                    ".MuiOutlinedInput-notchedOutline": {
-                        borderColor: defaultTextColor,
-                    },
-                    "&:hover .MuiOutlinedInput-notchedOutline": {
-                        borderColor: defaultTextColor,
-                    },
-                },
-            },
-        },
-    },
-});
+const userTheme = {
+    light: getUserTheme("light"),
+    dark: getUserTheme("dark"),
+};
 
 const App = (props: AppProps) => {
     const { jsx } = props;
+    const [theme, setTheme] = useState<PaletteMode>("dark");
+    const themeClass = `taipy-${theme}`;
+    const MuiTheme = userTheme[theme];
     return (
-        <ThemeProvider theme={MuiTheme}>
-            <LocalizationProvider dateAdapter={AdapterDateFns}>
-                <Box style={containerSx}>
-                    <Box component="main" sx={mainSx}>
-                        <JsxParser
-                            disableKeyGeneration={true}
-                            components={JSXSupportedComponent as Record<string, ComponentType>}
-                            jsx={jsx}
-                            renderUnrecognized={unregisteredRender}
-                            allowUnknownElements={false}
-                            renderError={renderError}
-                            blacklistedAttrs={[]}
-                            blacklistedTags={[]}
-                        />
+        <>
+            <GlobalStyles styles={{ body: { backgroundColor: MuiTheme.palette.background.default, color: MuiTheme.typography.body1.color } }} />
+            <ThemeProvider theme={MuiTheme}>
+                <LocalizationProvider dateAdapter={AdapterDateFns}>
+                    <Box style={containerSx} className={themeClass}>
+                        <Box component="main" sx={mainSx}>
+                            <JsxParser
+                                disableKeyGeneration={true}
+                                components={JSXSupportedComponent as Record<string, ComponentType>}
+                                jsx={jsx}
+                                renderUnrecognized={unregisteredRender}
+                                allowUnknownElements={false}
+                                renderError={renderError}
+                                blacklistedAttrs={[]}
+                                blacklistedTags={[]}
+                            />
+                        </Box>
                     </Box>
-                </Box>
-            </LocalizationProvider>
-        </ThemeProvider>
+                </LocalizationProvider>
+            </ThemeProvider>
+        </>
     );
 };
 

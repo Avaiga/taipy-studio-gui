@@ -11,20 +11,11 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import MuiButton from "@mui/material/Button";
+/**************************************************************
 
-interface ButtonProps {
-    defaultvalue?: string;
-}
+                   FONTFACES IMPORTS AND DECLARATIONS
 
-const Button = (props: ButtonProps) => {
-    const { defaultvalue = "Taipy" } = props;
+***************************************************************/
 
-    return (
-        <MuiButton className="taipy-button" variant="outlined">
-            {defaultvalue || "Taipy"}
-        </MuiButton>
-    );
-};
-
-export default Button;
+/* Lato */
+@import url('https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,400;0,700;1,400&display=swap');
