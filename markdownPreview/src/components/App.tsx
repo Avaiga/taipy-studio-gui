@@ -31,6 +31,7 @@ import Table from "./Taipy/Table";
 import { renderError, unregisteredRender } from "./Taipy/Unregistered";
 import { getUserTheme } from "./themes";
 import FileDownload from "./Taipy/FileDownload";
+import FileSelector from "./Taipy/FileSelector";
 
 interface AppProps {
     jsx: string;
@@ -49,6 +50,7 @@ export const JSXSupportedComponent: Record<string, unknown> = {
     taipy_layout: Layout,
     taipy_date: DateSelector,
     taipy_file_download: FileDownload,
+    taipy_file_selector: FileSelector,
 };
 
 const mainSx = {
