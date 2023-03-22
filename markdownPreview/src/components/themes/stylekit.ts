@@ -12,7 +12,7 @@
  */
 
 const stylekitConfig = {
-    borderRadius: "8px",
+    borderRadius: 8,
     colorBackgroundDark: "#051924",
     colorBackgroundLight: "#f1f1f1",
     colorError: "#FF595E",
@@ -54,9 +54,9 @@ export const stylekitTheme = {
             fontSize: "1rem",
         },
     },
-    // shape: {
-    //     borderRadius: stylekitConfig.borderRadius,
-    // },
+    shape: {
+        borderRadius: stylekitConfig.borderRadius,
+    },
     // Components normalization
     components: {
         // Form control
