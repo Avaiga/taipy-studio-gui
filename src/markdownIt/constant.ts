@@ -12,3 +12,7 @@
  */
 
 export const PLUGIN_NAME = "studioGui";
+
+export const DATA_FILE_TYPES = ["json", "csv"];
+
+export const CSV_DELIMITER = ",";

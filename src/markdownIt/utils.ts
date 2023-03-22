@@ -15,6 +15,8 @@ import { l10n, workspace } from "vscode";
 import path from "path";
 import { existsSync, readFileSync } from "fs";
 import { getLog } from "../gui/logging";
+import { CSV_DELIMITER, DATA_FILE_TYPES } from "./constant";
+import { parse as csvParse } from "csv-parse/sync";
 
 // export const camelize = (text: string): string => {
 //     const a = text.toLowerCase().replace(/[-_\s.]+(.)?/g, (_, c) => (c ? c.toUpperCase() : ""));
@@ -48,20 +50,32 @@ export const parseMockData = (value: string): string => {
         if (!mockContent?.data) {
             return value;
         }
-        const mockData = mockContent as Record<string, string>;
+        const mockData = mockContent as Record<string, any>;
         for (const [k, v] of Object.entries(mockData)) {
             const searchString = `{${k}}`;
             if (value.includes(searchString)) {
-                let replaceString = v;
-                const potentialDataFile = path.join(basePath, v);
-                if (existsSync(potentialDataFile) && dataFileTypes.some((v) => potentialDataFile.endsWith(v))) {
-                    const dataFileContent = readFileSync(potentialDataFile, {
-                        encoding: "utf8",
-                        flag: "r",
-                    });
-                    replaceString = encodeURIComponent(dataFileContent);
+                let replaceData: string = v;
+                if (typeof replaceData === "object") {
+                    replaceData = encodeURIComponent(JSON.stringify(replaceData));
+                } else if (typeof replaceData === "string") {
+                    const potentialDataFile = path.join(basePath, v);
+                    if (existsSync(potentialDataFile) && DATA_FILE_TYPES.some((v) => potentialDataFile.endsWith(v))) {
+                        const dataFileContent = readFileSync(potentialDataFile, {
+                            encoding: "utf8",
+                            flag: "r",
+                        });
+                        if (potentialDataFile.endsWith("json")) {
+                            replaceData = encodeURIComponent(dataFileContent);
+                        }
+                        if (potentialDataFile.endsWith("csv")) {
+                            try {
+                                const csvParsedData = csvParse(dataFileContent, { delimiter: CSV_DELIMITER }) as any[];
+                                replaceData = encodeURIComponent(JSON.stringify(parseCsvJson(csvParsedData)));
+                            } catch (error) {}
+                        }
+                    }
                 }
-                value = value.replace(new RegExp(searchString, "g"), replaceString);
+                value = value.replace(new RegExp(searchString, "g"), replaceData);
             }
         }
     } catch (error: any) {
@@ -70,4 +84,13 @@ export const parseMockData = (value: string): string => {
     return value;
 };
 
-const dataFileTypes = ["json", "csv"];
+const parseCsvJson = (csvData: any[]) => {
+    const header: string[] = csvData[0];
+    const data = csvData.slice(1);
+    return data.map((v) =>
+        v.reduce((a: Record<string, any>, c: string, i: number) => {
+            a[header[i]] = c;
+            return a;
+        }, {} as Record<string, any>),
+    );
+};

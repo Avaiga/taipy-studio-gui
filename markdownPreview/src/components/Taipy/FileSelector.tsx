@@ -42,7 +42,6 @@ const FileSelector = (props: FileSelectorProps) => {
 
     const handleDragOverWithLabel = useCallback(
         (evt: DragEvent) => {
-            console.log(evt);
             const target = evt.currentTarget as HTMLElement;
             setDropSx((sx) =>
                 sx.minWidth === defaultSx.minWidth && target ? { minWidth: target.clientWidth + "px" } : sx,

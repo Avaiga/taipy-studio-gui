@@ -113,6 +113,7 @@
     "webpack-cli": "^5.0.0"
   },
   "dependencies": {
+    "csv-parse": "^5.3.6",
     "markdown-it": "^13.0.1",
     "string-similarity": "^4.0.4"
   }
