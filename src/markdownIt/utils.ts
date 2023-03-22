@@ -54,7 +54,7 @@ export const parseMockData = (value: string): string => {
             if (value.includes(searchString)) {
                 let replaceString = v;
                 const potentialDataFile = path.join(basePath, v);
-                if (existsSync(potentialDataFile)) {
+                if (existsSync(potentialDataFile) && dataFileTypes.some((v) => potentialDataFile.endsWith(v))) {
                     const dataFileContent = readFileSync(potentialDataFile, {
                         encoding: "utf8",
                         flag: "r",
@@ -69,3 +69,5 @@ export const parseMockData = (value: string): string => {
     }
     return value;
 };
+
+const dataFileTypes = ["json", "csv"];
