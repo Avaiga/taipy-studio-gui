@@ -53,30 +53,33 @@ export const parseMockData = (value: string): string => {
         const mockData = mockContent as Record<string, any>;
         for (const [k, v] of Object.entries(mockData)) {
             const searchString = `{${k}}`;
-            if (value.includes(searchString)) {
-                let replaceData: string = v;
-                if (typeof replaceData === "object") {
-                    replaceData = encodeURIComponent(JSON.stringify(replaceData));
-                } else if (typeof replaceData === "string") {
-                    const potentialDataFile = path.join(basePath, v);
-                    if (existsSync(potentialDataFile) && DATA_FILE_TYPES.some((v) => potentialDataFile.endsWith(v))) {
-                        const dataFileContent = readFileSync(potentialDataFile, {
-                            encoding: "utf8",
-                            flag: "r",
-                        });
-                        if (potentialDataFile.endsWith("json")) {
-                            replaceData = encodeURIComponent(dataFileContent);
-                        }
-                        if (potentialDataFile.endsWith("csv")) {
-                            try {
-                                const csvParsedData = csvParse(dataFileContent, { delimiter: CSV_DELIMITER }) as any[];
-                                replaceData = encodeURIComponent(JSON.stringify(parseCsvJson(csvParsedData)));
-                            } catch (error) {}
-                        }
-                    }
-                }
-                value = value.replace(new RegExp(searchString, "g"), replaceData);
+            if (!value.includes(searchString)) {
+                continue;
             }
+            let replaceData: string = v;
+            const potentialDataFile = path.join(basePath, v);
+            if (typeof replaceData === "object") {
+                replaceData = encodeURIComponent(JSON.stringify(replaceData));
+            } else if (
+                typeof replaceData === "string" &&
+                existsSync(potentialDataFile) &&
+                DATA_FILE_TYPES.some((v) => potentialDataFile.endsWith(v))
+            ) {
+                const dataFileContent = readFileSync(potentialDataFile, {
+                    encoding: "utf8",
+                    flag: "r",
+                });
+                if (potentialDataFile.endsWith("json")) {
+                    replaceData = encodeURIComponent(dataFileContent);
+                }
+                if (potentialDataFile.endsWith("csv")) {
+                    try {
+                        const csvParsedData = csvParse(dataFileContent, { delimiter: CSV_DELIMITER }) as any[];
+                        replaceData = encodeURIComponent(JSON.stringify(parseCsvJson(csvParsedData)));
+                    } catch (error) {}
+                }
+            }
+            value = value.replace(new RegExp(searchString, "g"), replaceData);
         }
     } catch (error: any) {
         getLog().error(l10n.t("Parse mock data file: "), error.message || error);
