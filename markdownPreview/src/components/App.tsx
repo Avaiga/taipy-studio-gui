@@ -30,6 +30,7 @@ import Part from "./Taipy/Part";
 import Table from "./Taipy/Table";
 import { renderError, unregisteredRender } from "./Taipy/Unregistered";
 import { getUserTheme } from "./themes";
+import FileDownload from "./Taipy/FileDownload";
 
 interface AppProps {
     jsx: string;
@@ -47,6 +48,7 @@ export const JSXSupportedComponent: Record<string, unknown> = {
     taipy_pane: Pane,
     taipy_layout: Layout,
     taipy_date: DateSelector,
+    taipy_file_download: FileDownload,
 };
 
 const mainSx = {
@@ -62,12 +64,19 @@ const userTheme = {
 
 const App = (props: AppProps) => {
     const { jsx } = props;
-    const [theme, setTheme] = useState<PaletteMode>(document.body.classList.contains('vscode-dark') ? "dark" : "light");
+    const [theme, setTheme] = useState<PaletteMode>(document.body.classList.contains("vscode-dark") ? "dark" : "light");
     const themeClass = `taipy-${theme}`;
     const MuiTheme = userTheme[theme];
     return (
         <>
-            <GlobalStyles styles={{ body: { backgroundColor: MuiTheme.palette.background.default, color: MuiTheme.typography.body1.color } }} />
+            <GlobalStyles
+                styles={{
+                    body: {
+                        backgroundColor: MuiTheme.palette.background.default,
+                        color: MuiTheme.typography.body1.color,
+                    },
+                }}
+            />
             <ThemeProvider theme={MuiTheme}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <Box style={containerSx} className={themeClass}>
