@@ -11,13 +11,24 @@
  * specific language governing permissions and limitations under the License.
  */
 
-export interface TaipyBaseProps {
-    id?: string;
-    libClassName?: string;
-    className?: string;
-    dynamicClassName?: string;
+import { useMemo } from "react";
+import Avatar from "@mui/material/Avatar";
+import { SxProps, useTheme, Theme } from "@mui/system";
+
+export interface Icon {
+    path: string;
+    text: string;
 }
 
-export interface LovProps {
-    lov?: string;
+interface IconProps {
+    img: Icon;
+    sx?: SxProps;
 }
+
+export const avatarSx = { bgcolor: (theme: Theme) => theme.palette.text.primary };
+
+export const IconAvatar = ({ img, sx }: IconProps) => {
+    const avtSx = useMemo(() => (sx ? { ...avatarSx, ...sx } : avatarSx), [sx]);
+
+    return <Avatar alt={img.text} src={img.path} sx={avtSx} />;
+};

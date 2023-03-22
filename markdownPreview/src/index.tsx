@@ -15,16 +15,13 @@ import { createRoot } from "react-dom/client";
 import App from "./components/App";
 
 function init() {
-    const newDiv = document.createElement("div", {});
-    newDiv.setAttribute("id", "root");
-    var innerHTML = document.body.innerHTML;
+    const rootDiv = document.createElement("div", {});
+    rootDiv.setAttribute("id", "root");
+    const bodyInnerHTML = document.body.innerHTML;
     document.body.innerHTML = "";
-    document.body.appendChild(newDiv);
-    const container = document.getElementById("root");
-    if (container) {
-        const root = createRoot(container);
-        root.render(<App jsx={innerHTML} />);
-    }
+    document.body.appendChild(rootDiv);
+    const root = createRoot(rootDiv);
+    root.render(<App jsx={bodyInnerHTML} />);
 }
 
 window.addEventListener("vscode.markdown.updateContent", init);

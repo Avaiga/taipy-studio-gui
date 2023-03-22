@@ -15,7 +15,7 @@ import { Box, PaletteMode, ThemeProvider } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import GlobalStyles from "@mui/material/GlobalStyles";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { ComponentType, useState } from "react";
+import { ComponentType, useEffect, useState } from "react";
 import JsxParser from "react-jsx-parser";
 import Button from "./Taipy/Button";
 import Chart from "./Taipy/Chart";
@@ -33,6 +33,8 @@ import { getUserTheme } from "./themes";
 import FileDownload from "./Taipy/FileDownload";
 import FileSelector from "./Taipy/FileSelector";
 import Image from "./Taipy/Image";
+import Toggle from "./Taipy/Toggle";
+import { useDarkMode } from "usehooks-ts";
 
 interface AppProps {
     jsx: string;
@@ -53,6 +55,7 @@ export const JSXSupportedComponent: Record<string, unknown> = {
     taipy_file_download: FileDownload,
     taipy_file_selector: FileSelector,
     taipy_image: Image,
+    taipy_toggle: Toggle,
 };
 
 const mainSx = {
@@ -68,7 +71,11 @@ const userTheme = {
 
 const App = (props: AppProps) => {
     const { jsx } = props;
-    const [theme, setTheme] = useState<PaletteMode>(document.body.classList.contains("vscode-dark") ? "dark" : "light");
+    const { isDarkMode, enable, disable } = useDarkMode();
+    useEffect(() => {
+        document.body.classList.contains("vscode-dark") ? enable() : disable();
+    }, []);
+    const theme = isDarkMode ? "dark" : "light";
     const themeClass = `taipy-${theme}`;
     const MuiTheme = userTheme[theme];
     return (
