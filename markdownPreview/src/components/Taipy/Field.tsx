@@ -12,10 +12,9 @@
  */
 
 import Typography from "@mui/material/Typography";
-import { TaipyBaseProps } from "./utils";
 import { parseBooleanProperty } from "./utils/booleanUtils";
 
-interface TaipyFieldProps extends TaipyBaseProps {
+interface TaipyFieldProps {
     defaultvalue?: string;
     raw?: string;
 }

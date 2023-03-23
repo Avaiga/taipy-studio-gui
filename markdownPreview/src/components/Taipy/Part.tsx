@@ -14,10 +14,9 @@
 import { ReactNode } from "react";
 import Box from "@mui/material/Box";
 
-import { TaipyBaseProps } from "./utils";
 import { parseBooleanProperty } from "./utils/booleanUtils";
 
-interface PartProps extends TaipyBaseProps {
+interface PartProps {
     render?: string;
     children?: ReactNode;
 }

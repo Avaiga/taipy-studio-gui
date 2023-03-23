@@ -11,8 +11,6 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { TaipyBaseProps } from ".";
-
 export type TableValueType = Record<string, any>[];
 
 // Sample Data Format
@@ -21,7 +19,7 @@ export type TableValueType = Record<string, any>[];
 //     { id: 2, lastName: "Lannister", firstName: null, age: 42 },
 // ];
 
-export interface TaipyTableProps extends TaipyBaseProps {
+export interface TaipyTableProps {
     defaultvalue: string;
     width?: string;
     height?: string;

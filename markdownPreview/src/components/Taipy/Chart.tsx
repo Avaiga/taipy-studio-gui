@@ -14,7 +14,6 @@
 import { Box, Skeleton, Tooltip, Typography } from "@mui/material";
 import { Layout } from "plotly.js";
 import { CSSProperties, lazy, Suspense, useMemo, useRef } from "react";
-import { TaipyBaseProps } from "./utils";
 
 // const Plot = lazy(() => import("react-plotly.js"));
 
@@ -22,7 +21,7 @@ import Plot from "react-plotly.js";
 import { TableValueType } from "./utils/tableUtils";
 import { parseBooleanProperty } from "./utils/booleanUtils";
 
-interface ChartProps extends TaipyBaseProps {
+interface ChartProps {
     defaultvalue: string;
     render?: string;
     hovertext?: string;

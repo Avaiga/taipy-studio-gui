@@ -11,13 +11,6 @@
  * specific language governing permissions and limitations under the License.
  */
 
-export interface TaipyBaseProps {
-    id?: string;
-    libClassName?: string;
-    className?: string;
-    dynamicClassName?: string;
-}
-
 export interface LovProps {
     lov?: string;
 }

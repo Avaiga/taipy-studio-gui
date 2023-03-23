@@ -14,9 +14,7 @@
 import { ReactNode, useMemo } from "react";
 import Box from "@mui/material/Box";
 
-import { TaipyBaseProps } from "./utils";
-
-interface LayoutProps extends TaipyBaseProps {
+interface LayoutProps {
     columns?: string;
     children?: ReactNode;
     gap?: string;
