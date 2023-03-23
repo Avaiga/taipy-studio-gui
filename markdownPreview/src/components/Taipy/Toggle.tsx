@@ -19,7 +19,7 @@ import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
 
 import ThemeToggle from "./ThemeToggle";
 import { IconAvatar } from "./utils/icon";
-import { LovProps } from "./utils";
+import { LovProps } from "./utils/lov";
 import { parseBooleanProperty } from "./utils/booleanUtils";
 import { getLov, LovItem } from "./utils/lov";
 

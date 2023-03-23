@@ -11,11 +11,11 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { Box, PaletteMode, ThemeProvider } from "@mui/material";
+import { Box, ThemeProvider } from "@mui/material";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import GlobalStyles from "@mui/material/GlobalStyles";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
-import { ComponentType, useEffect, useState } from "react";
+import { ComponentType, useEffect } from "react";
 import JsxParser from "react-jsx-parser";
 import Button from "./Taipy/Button";
 import Chart from "./Taipy/Chart";
@@ -35,6 +35,7 @@ import FileSelector from "./Taipy/FileSelector";
 import Image from "./Taipy/Image";
 import Toggle from "./Taipy/Toggle";
 import { useDarkMode } from "usehooks-ts";
+import Slider from "./Taipy/Slider";
 
 interface AppProps {
     jsx: string;
@@ -56,6 +57,7 @@ export const JSXSupportedComponent: Record<string, unknown> = {
     taipy_file_selector: FileSelector,
     taipy_image: Image,
     taipy_toggle: Toggle,
+    taipy_slider: Slider,
 };
 
 const mainSx = {
