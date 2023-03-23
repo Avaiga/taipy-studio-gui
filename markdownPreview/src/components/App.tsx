@@ -10,11 +10,12 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-import { Box, ThemeProvider } from "@mui/material";
+import { Box, CssBaseline, ThemeProvider } from "@mui/material";
 import GlobalStyles from "@mui/material/GlobalStyles";
 import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { ComponentType, useEffect } from "react";
+import { ErrorBoundary } from "react-error-boundary";
 import JsxParser from "react-jsx-parser";
 import { useDarkMode } from "usehooks-ts";
 
@@ -38,6 +39,7 @@ import Slider from "./Taipy/Slider";
 import Table from "./Taipy/Table";
 import Toggle from "./Taipy/Toggle";
 import { renderError, unregisteredRender } from "./Taipy/Unregistered";
+import ErrorFallback from "./Taipy/utils/ErrorBoundary";
 import { getUserTheme } from "./themes";
 
 interface AppProps {
@@ -99,17 +101,20 @@ const App = (props: AppProps) => {
             <ThemeProvider theme={MuiTheme}>
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <Box style={containerSx} className={themeClass}>
+                        <CssBaseline />
                         <Box component="main" sx={mainSx}>
-                            <JsxParser
-                                disableKeyGeneration={true}
-                                components={JSXSupportedComponent as Record<string, ComponentType>}
-                                jsx={jsx}
-                                renderUnrecognized={unregisteredRender}
-                                allowUnknownElements={false}
-                                renderError={renderError}
-                                blacklistedAttrs={[]}
-                                blacklistedTags={[]}
-                            />
+                            <ErrorBoundary FallbackComponent={ErrorFallback}>
+                                <JsxParser
+                                    disableKeyGeneration={true}
+                                    components={JSXSupportedComponent as Record<string, ComponentType>}
+                                    jsx={jsx}
+                                    renderUnrecognized={unregisteredRender}
+                                    allowUnknownElements={false}
+                                    renderError={renderError}
+                                    blacklistedAttrs={[]}
+                                    blacklistedTags={[]}
+                                />
+                            </ErrorBoundary>
                         </Box>
                     </Box>
                 </LocalizationProvider>
