@@ -11,7 +11,7 @@
  * specific language governing permissions and limitations under the License.
  */
 import Avatar from "@mui/material/Avatar";
-import { SxProps, Theme, useTheme } from "@mui/system";
+import { SxProps, Theme } from "@mui/system";
 import { useMemo } from "react";
 
 export interface Icon {
