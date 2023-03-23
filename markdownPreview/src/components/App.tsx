@@ -17,7 +17,7 @@ import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { ComponentType, useEffect } from "react";
 import { ErrorBoundary } from "react-error-boundary";
 import JsxParser from "react-jsx-parser";
-import { useDarkMode } from "usehooks-ts";
+import { useDarkMode, useSessionStorage } from "usehooks-ts";
 
 import Button from "./Taipy/Button";
 import Chart from "./Taipy/Chart";
@@ -31,6 +31,7 @@ import Indicator from "./Taipy/Indicator";
 import Input from "./Taipy/Input";
 import Layout from "./Taipy/Layout";
 import Menu from "./Taipy/Menu";
+import NavBar from "./Taipy/NavBar";
 import Number from "./Taipy/Number";
 import Pane from "./Taipy/Pane";
 import Part from "./Taipy/Part";
@@ -44,6 +45,7 @@ import { getUserTheme } from "./themes";
 
 interface AppProps {
     jsx: string;
+    baseHref: string;
 }
 
 export const JSXSupportedComponent: Record<string, unknown> = {
@@ -58,6 +60,7 @@ export const JSXSupportedComponent: Record<string, unknown> = {
     taipy_input: Input,
     taipy_layout: Layout,
     taipy_menu: Menu,
+    taipy_navbar: NavBar,
     taipy_number: Number,
     taipy_pane: Pane,
     taipy_part: Part,
@@ -82,8 +85,10 @@ const userTheme = {
 const App = (props: AppProps) => {
     const { jsx } = props;
     const { isDarkMode, enable, disable } = useDarkMode();
+    const [_, setBaseHref] = useSessionStorage("baseHref", "");
     useEffect(() => {
         document.body.classList.contains("vscode-dark") ? enable() : disable();
+        setBaseHref(props.baseHref);
     }, []);
     const theme = isDarkMode ? "dark" : "light";
     const themeClass = `taipy-${theme}`;

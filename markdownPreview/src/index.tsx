@@ -18,10 +18,11 @@ function init() {
     const rootDiv = document.createElement("div", {});
     rootDiv.setAttribute("id", "root");
     const bodyInnerHTML = document.body.innerHTML;
+    const baseHref = (document.querySelector('base') || {}).href || "";
     document.body.innerHTML = "";
     document.body.appendChild(rootDiv);
     const root = createRoot(rootDiv);
-    root.render(<App jsx={bodyInnerHTML} />);
+    root.render(<App jsx={bodyInnerHTML} baseHref={baseHref} />);
 }
 
 window.addEventListener("vscode.markdown.updateContent", init);
