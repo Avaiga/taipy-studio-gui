@@ -45,7 +45,7 @@ const Layout = (props: LayoutProps) => {
     }, [columns, gap]);
 
     return (
-        <Box id={props.id} sx={sx}>
+        <Box sx={sx}>
             {props.children}
         </Box>
     );

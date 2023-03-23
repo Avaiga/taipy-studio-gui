@@ -96,7 +96,7 @@ const Chart = (props: ChartProps) => {
         } as Layout;
     }, []);
     return parseBooleanProperty(render) ? (
-        <Box id={props.id} key="div" className={props.className} ref={plotRef}>
+        <Box key="div" ref={plotRef}>
             <Tooltip title={hovertext}>
                 <Suspense fallback={<Skeleton key="skeleton" sx={skelStyle} />}>
                     <Plot data={dataPl} layout={layout} style={style} config={{ staticPlot: true }} />
