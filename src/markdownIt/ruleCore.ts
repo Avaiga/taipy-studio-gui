@@ -22,6 +22,7 @@ import { parseMockData } from "./utils";
 const REPLACE_CONTROL_RE = RegExp(CONTROL_RE, "g");
 const REPLACE_OPENING_TAG_RE = RegExp(OPENING_TAG_RE, "g");
 const REPLACE_CLOSING_TAG_RE = RegExp(CLOSING_TAG_RE, "g");
+const parsedPropertyList = ["defaultValue", "lov", "value"];
 
 const getTaipyReplace = (md: MarkdownIt) => {
     const arrayReplaceAt = md.utils.arrayReplaceAt;
@@ -83,7 +84,6 @@ const getTaipyReplace = (md: MarkdownIt) => {
 };
 
 export const getTokenAttribute = (name: string, value: string): [string, string] => {
-    const parsedPropertyList = ["defaultValue", "lov"];
     if (parsedPropertyList.includes(name)) {
         return [name, parseMockData(value)];
     }

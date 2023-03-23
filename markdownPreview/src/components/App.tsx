@@ -36,6 +36,7 @@ import Image from "./Taipy/Image";
 import Toggle from "./Taipy/Toggle";
 import { useDarkMode } from "usehooks-ts";
 import Slider from "./Taipy/Slider";
+import Indicator from "./Taipy/Indicator";
 
 interface AppProps {
     jsx: string;
@@ -58,6 +59,7 @@ export const JSXSupportedComponent: Record<string, unknown> = {
     taipy_image: Image,
     taipy_toggle: Toggle,
     taipy_slider: Slider,
+    taipy_indicator: Indicator,
 };
 
 const mainSx = {

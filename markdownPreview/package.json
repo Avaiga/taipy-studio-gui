@@ -14,6 +14,7 @@
     "@types/react": "^18.0.18",
     "@types/react-dom": "^18.0.6",
     "@types/react-plotly.js": "^2.6.0",
+    "@types/sprintf-js": "^1.1.2",
     "@typescript-eslint/eslint-plugin": "^5.12.1",
     "@typescript-eslint/parser": "^5.12.1",
     "copy-webpack-plugin": "^11.0.0",
@@ -40,6 +41,7 @@
     "react-error-boundary": "^3.1.4",
     "react-jsx-parser": "^1.29.0",
     "react-plotly.js": "^2.6.0",
+    "sprintf-js": "^1.1.2",
     "usehooks-ts": "^2.9.1"
   }
 }
