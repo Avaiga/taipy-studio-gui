@@ -61,8 +61,7 @@ const Chart = (props: ChartProps) => {
     let data: TableValueType = [];
     try {
         if (defaultvalue) {
-            const jsonData = JSON.parse(decodeURIComponent(defaultvalue)) as TableValueType;
-            data = jsonData;
+            data = JSON.parse(decodeURIComponent(defaultvalue)) as TableValueType;
         }
     } catch (e) {}
     const columnList = Object.keys(data.at(0) || []);

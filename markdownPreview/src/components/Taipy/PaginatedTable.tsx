@@ -20,8 +20,7 @@ const PaginatedTable = (props: TaipyPaginatedTableProps) => {
     let data: TableValueType = [];
     try {
         if (defaultvalue) {
-            const jsonData = JSON.parse(decodeURIComponent(defaultvalue)) as TableValueType;
-            data = jsonData;
+            data = JSON.parse(decodeURIComponent(defaultvalue)) as TableValueType;
         }
     } catch (e) {}
     const columnList = columns ? columns.split(";") : data.length ? Object.keys(data[0]) : [];

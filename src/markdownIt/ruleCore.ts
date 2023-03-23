@@ -30,7 +30,10 @@ const getTaipyReplace = (md: MarkdownIt) => {
         const tagQueue: string[] = [];
         for (let j = 0; j < tokens.length; j++) {
             if (tokens[j].type !== "inline") {
-                if (tagQueue.length > 0 && (tokens[j].type === "paragraph_open" || tokens[j].type === "paragraph_close")) {
+                if (
+                    tagQueue.length > 0 &&
+                    (tokens[j].type === "paragraph_open" || tokens[j].type === "paragraph_close")
+                ) {
                     tokens.splice(j, 1);
                     j--;
                 }
@@ -52,20 +55,24 @@ const getTaipyReplace = (md: MarkdownIt) => {
                         tokens[j].children = arrayReplaceAt(
                             childTokens,
                             i,
-                            getOpeningToken(token.content, state.Token)
+                            getOpeningToken(token.content, state.Token),
                         );
                         tagQueue.push(element.type);
                         continue;
                     }
                     if (CONTROL_RE.test(token.content)) {
-                        tokens[j].children = arrayReplaceAt(childTokens, i, getControlToken(token.content, state.Token));
+                        tokens[j].children = arrayReplaceAt(
+                            childTokens,
+                            i,
+                            getControlToken(token.content, state.Token),
+                        );
                         continue;
                     }
                     if (CLOSING_TAG_RE.exec(token.content)) {
                         tokens[j].children = arrayReplaceAt(
                             childTokens,
                             i,
-                            getClosingToken(token.content, tagQueue.pop() || "part", state.Token)
+                            getClosingToken(token.content, tagQueue.pop() || "part", state.Token),
                         );
                     }
                 }
@@ -73,6 +80,14 @@ const getTaipyReplace = (md: MarkdownIt) => {
         }
     };
     return taipyReplace;
+};
+
+export const getTokenAttribute = (name: string, value: string): [string, string] => {
+    const parsedPropertyList = ["defaultValue", "lov"];
+    if (parsedPropertyList.includes(name)) {
+        return [name, parseMockData(value)];
+    }
+    return [name, value];
 };
 
 const getOpeningToken = (content: string, tokenClass: typeof Token): Token[] => {
@@ -90,8 +105,8 @@ const getOpeningToken = (content: string, tokenClass: typeof Token): Token[] => 
         token.block = true;
         token.markup = regexMatchResult?.at(2) || match;
         token.tag = e.type === "text" ? "part" : e.type;
-        token.attrs = e.properties.map((v) => [v.name, v.value]);
-        token.attrPush(["defaultValue", parseMockData(e.value)]);
+        token.attrs = e.properties.map((v) => getTokenAttribute(v.name, v.value));
+        token.attrPush(getTokenAttribute("defaultValue", e.value));
         tokenNodes.push(token);
         lastPos = offset + match.length;
         return match;
@@ -119,8 +134,8 @@ const getControlToken = (content: string, tokenClass: typeof Token): Token[] => 
         token.markup = regexMatchResult?.at(1) || match;
         token.tag = e.type;
         token.nesting = 0;
-        token.attrs = e.properties.map((v) => [v.name, v.value]);
-        token.attrPush(["defaultValue", parseMockData(e.value)]);
+        token.attrs = e.properties.map((v) => getTokenAttribute(v.name, v.value));
+        token.attrPush(getTokenAttribute("defaultValue", e.value));
         tokenNodes.push(token);
         lastPos = offset + match.length;
         return match;

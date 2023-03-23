@@ -21,7 +21,7 @@ import ThemeToggle from "./ThemeToggle";
 import { IconAvatar } from "./utils/icon";
 import { LovProps } from "./utils";
 import { parseBooleanProperty } from "./utils/booleanUtils";
-import { LovItem } from "./utils/lov";
+import { getLov, LovItem } from "./utils/lov";
 
 const groupSx = { verticalAlign: "middle" };
 
@@ -32,11 +32,10 @@ interface ToggleProps extends LovProps {
 }
 
 const Toggle = (props: ToggleProps) => {
-    const { label = "", lov = "", defaultvalue = "Item 1", theme = "false" } = props;
+    const { label = "", lov = "", defaultvalue = "", theme = "false" } = props;
     const [value, setValue] = useState(defaultvalue);
 
-    // const lovList = getLov(lov) || [];
-    const lovList: LovItem[] = [{id: "Item 1", label: "Item 1"}, {id: "Item 2", label: "Item 2"}];
+    const lovList = getLov(lov) || [{id: "Item 1", label: "Item 1"}, {id: "Item 2", label: "Item 2"}];
 
     return parseBooleanProperty(theme) ? (
         <ThemeToggle {...props} />
