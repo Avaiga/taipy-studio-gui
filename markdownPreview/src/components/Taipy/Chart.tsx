@@ -10,16 +10,14 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-
 import { Box, Skeleton, Tooltip, Typography } from "@mui/material";
 import { Layout } from "plotly.js";
-import { CSSProperties, lazy, Suspense, useMemo, useRef } from "react";
-
+import { CSSProperties, Suspense, lazy, useMemo, useRef } from "react";
 // const Plot = lazy(() => import("react-plotly.js"));
-
 import Plot from "react-plotly.js";
-import { TableValueType } from "./utils/tableUtils";
+
 import { parseBooleanProperty } from "./utils/booleanUtils";
+import { TableValueType } from "./utils/tableUtils";
 
 interface ChartProps {
     defaultvalue: string;
@@ -54,7 +52,7 @@ const Chart = (props: ChartProps) => {
             height === undefined
                 ? ({ ...defaultStyle, width: width } as CSSProperties)
                 : ({ ...defaultStyle, width: width, height: height } as CSSProperties),
-        [width, height]
+        [width, height],
     );
     const skelStyle = useMemo(() => ({ ...style, minHeight: "7em" }), [style]);
     let data: TableValueType = [];

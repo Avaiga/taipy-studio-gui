@@ -10,11 +10,11 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
+import type MarkdownIt from "markdown-it";
 import { ExtensionContext } from "vscode";
-import type MarkdownIt from 'markdown-it';
+
 import { GuiContext } from "./gui";
 import MarkdownItStudioGui from "./markdownIt";
 

@@ -1,5 +1,6 @@
 import { CardHeader, SxProps, Tooltip, TypographyProps } from "@mui/material";
 import { CSSProperties, useMemo } from "react";
+
 import { Icon, IconAvatar } from "./icon";
 
 export interface LovProps {

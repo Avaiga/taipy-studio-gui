@@ -10,9 +10,9 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-
-import Button from "@mui/material/Button";
 import FileDownloadIco from "@mui/icons-material/FileDownload";
+import Button from "@mui/material/Button";
+
 import { parseBooleanProperty } from "./utils/booleanUtils";
 
 interface FileDownloadProps {

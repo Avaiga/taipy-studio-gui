@@ -10,14 +10,13 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-
-import { ReactNode, useCallback, useMemo, useState } from "react";
+import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
+import ChevronRightIcon from "@mui/icons-material/ChevronRight";
 import Box from "@mui/material/Box";
 import Divider from "@mui/material/Divider";
 import Drawer from "@mui/material/Drawer";
 import IconButton from "@mui/material/IconButton";
-import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import ChevronRightIcon from "@mui/icons-material/ChevronRight";
+import { ReactNode, useCallback, useMemo, useState } from "react";
 
 type AnchorType = "left" | "bottom" | "right" | "top" | undefined;
 
@@ -56,7 +55,10 @@ const Pane = (props: PaneProps) => {
     const { anchor = "left", persistent = false, height = "30vh", width = "30vw", defaultvalue = true } = props;
     const [open, setOpen] = useState(defaultvalue === "true" || defaultvalue === true);
 
-    const drawerSx = useMemo(() => getDrawerSx(anchor === "left" || anchor === "right", width, height), [width, height, anchor]);
+    const drawerSx = useMemo(
+        () => getDrawerSx(anchor === "left" || anchor === "right", width, height),
+        [width, height, anchor],
+    );
     const headerSx = useMemo(() => getHeaderSx(anchor), [anchor]);
 
     const handleClose = useCallback(() => {
@@ -64,7 +66,13 @@ const Pane = (props: PaneProps) => {
     }, []);
 
     return !persistent || (persistent && open) ? (
-        <Drawer sx={drawerSx} variant={persistent ? "permanent" : undefined} anchor={anchor} open={open} onClose={handleClose}>
+        <Drawer
+            sx={drawerSx}
+            variant={persistent ? "permanent" : undefined}
+            anchor={anchor}
+            open={open}
+            onClose={handleClose}
+        >
             {persistent ? (
                 <>
                     <Box sx={headerSx}>

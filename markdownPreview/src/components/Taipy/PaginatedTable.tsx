@@ -10,10 +10,9 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
+import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
 import { DEFAULT_CELL_WIDTH, TableValueType, TaipyPaginatedTableProps } from "./utils/tableUtils";
-
-import { DataGrid, GridColDef } from "@mui/x-data-grid";
 
 const PaginatedTable = (props: TaipyPaginatedTableProps) => {
     const { defaultvalue, columns, height, width, pagesize } = props;

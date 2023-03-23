@@ -10,11 +10,10 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-
-import { useCallback, useEffect, useRef, useState } from "react";
+import UploadFile from "@mui/icons-material/UploadFile";
 import Button from "@mui/material/Button";
 import LinearProgress from "@mui/material/LinearProgress";
-import UploadFile from "@mui/icons-material/UploadFile";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 interface FileSelectorProps {
     label?: string;

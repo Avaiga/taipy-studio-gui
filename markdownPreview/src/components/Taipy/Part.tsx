@@ -10,9 +10,8 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-
-import { ReactNode } from "react";
 import Box from "@mui/material/Box";
+import { ReactNode } from "react";
 
 import { parseBooleanProperty } from "./utils/booleanUtils";
 
@@ -23,7 +22,7 @@ interface PartProps {
 
 const Part = (props: PartProps) => {
     const { render = "True", children } = props;
-    
+
     return parseBooleanProperty(render) ? <Box>{children}</Box> : null;
 };
 

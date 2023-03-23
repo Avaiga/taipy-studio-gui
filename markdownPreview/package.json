@@ -10,6 +10,7 @@
     "watch": "webpack watch --mode development"
   },
   "devDependencies": {
+    "@trivago/prettier-plugin-sort-imports": "^4.1.1",
     "@types/lodash": "^4.14.191",
     "@types/react": "^18.0.18",
     "@types/react-dom": "^18.0.6",
@@ -21,6 +22,7 @@
     "dotenv-webpack": "^8.0.1",
     "eslint": "^8.9.0",
     "path": "^0.12.7",
+    "prettier": "^2.8.6",
     "ts-loader": "^9.2.6",
     "typescript": "^4.8.4",
     "webpack": "^5.69.1",

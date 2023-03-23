@@ -10,13 +10,13 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-
-import { RuleCore } from "markdown-it/lib/parser_core";
-import Token from "markdown-it/lib/token";
-import StateCore from "markdown-it/lib/rules_core/state_core";
-import { PLUGIN_NAME } from "./constant";
 import MarkdownIt from "markdown-it";
-import { buildEmptyTaipyElement, CLOSING_TAG_RE, CONTROL_RE, OPENING_TAG_RE, processElement } from "../gui/diagnostics";
+import { RuleCore } from "markdown-it/lib/parser_core";
+import StateCore from "markdown-it/lib/rules_core/state_core";
+import Token from "markdown-it/lib/token";
+
+import { CLOSING_TAG_RE, CONTROL_RE, OPENING_TAG_RE, buildEmptyTaipyElement, processElement } from "../gui/diagnostics";
+import { PLUGIN_NAME } from "./constant";
 import { parseMockData } from "./utils";
 
 const REPLACE_CONTROL_RE = RegExp(CONTROL_RE, "g");

@@ -1,5 +1,6 @@
-import { createTheme, PaletteMode } from "@mui/material";
+import { PaletteMode, createTheme } from "@mui/material";
 import { merge } from "lodash";
+
 import { stylekitModeThemes, stylekitTheme } from "./stylekit";
 
 export const getUserTheme = (mode: PaletteMode) => {

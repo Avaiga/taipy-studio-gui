@@ -10,13 +10,13 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-
-import { l10n, workspace } from "vscode";
-import path from "path";
+import { parse as csvParse } from "csv-parse/sync";
 import { existsSync, readFileSync } from "fs";
+import path from "path";
+import { l10n, workspace } from "vscode";
+
 import { getLog } from "../gui/logging";
 import { CSV_DELIMITER, DATA_FILE_TYPES } from "./constant";
-import { parse as csvParse } from "csv-parse/sync";
 
 export const camelize = (text: string): string => {
     return text.replace(/^([A-Z])|[\s-_]+(\w)/g, function (match, p1, p2, offset) {

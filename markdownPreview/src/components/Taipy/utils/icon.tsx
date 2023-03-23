@@ -10,10 +10,9 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-
-import { useMemo } from "react";
 import Avatar from "@mui/material/Avatar";
-import { SxProps, useTheme, Theme } from "@mui/system";
+import { SxProps, Theme, useTheme } from "@mui/system";
+import { useMemo } from "react";
 
 export interface Icon {
     path: string;

@@ -10,17 +10,16 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-
-import { useState, useEffect, useCallback, useMemo } from "react";
 import { SxProps } from "@mui/material";
-import MuiSlider from "@mui/material/Slider";
 import Box from "@mui/material/Box";
+import MuiSlider from "@mui/material/Slider";
 import Typography from "@mui/material/Typography";
-
-import { getLov, LovImage, LovProps } from "./utils/lov";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { SyntheticEvent } from "react";
+
 import { getCssSize } from "./utils";
 import { parseBooleanProperty } from "./utils/booleanUtils";
+import { LovImage, LovProps, getLov } from "./utils/lov";
 
 interface SliderProps extends LovProps {
     width?: string;

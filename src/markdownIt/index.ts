@@ -10,11 +10,11 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-
 import { PluginSimple } from "markdown-it";
+
 import { PLUGIN_NAME } from "./constant";
-import ruleCoreGenerator from "./ruleCore";
 import renderRule from "./renderRule";
+import ruleCoreGenerator from "./ruleCore";
 
 const markdownItPlugin: PluginSimple = (md) => {
     // parse inline data to Taipy Gui tokens

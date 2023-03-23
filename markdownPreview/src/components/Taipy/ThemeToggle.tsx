@@ -10,15 +10,14 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-
-import { CSSProperties, MouseEvent, useState } from "react";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
+import Brightness3 from "@mui/icons-material/Brightness3";
+import WbSunny from "@mui/icons-material/WbSunny";
 import { PaletteMode } from "@mui/material";
+import Box from "@mui/material/Box";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
-import WbSunny from "@mui/icons-material/WbSunny";
-import Brightness3 from "@mui/icons-material/Brightness3";
+import Typography from "@mui/material/Typography";
+import { CSSProperties, MouseEvent, useState } from "react";
 import { useDarkMode } from "usehooks-ts";
 
 interface ThemeToggleProps {

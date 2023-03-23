@@ -10,18 +10,17 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-
-import { MouseEvent, useState } from "react";
 import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
 import ToggleButton from "@mui/material/ToggleButton";
 import ToggleButtonGroup from "@mui/material/ToggleButtonGroup";
+import Typography from "@mui/material/Typography";
+import { MouseEvent, useState } from "react";
 
 import ThemeToggle from "./ThemeToggle";
+import { parseBooleanProperty } from "./utils/booleanUtils";
 import { IconAvatar } from "./utils/icon";
 import { LovProps } from "./utils/lov";
-import { parseBooleanProperty } from "./utils/booleanUtils";
-import { getLov, LovItem } from "./utils/lov";
+import { LovItem, getLov } from "./utils/lov";
 
 const groupSx = { verticalAlign: "middle" };
 
@@ -35,7 +34,10 @@ const Toggle = (props: ToggleProps) => {
     const { label = "", lov = "", defaultvalue = "", theme = "false" } = props;
     const [value, setValue] = useState(defaultvalue);
 
-    const lovList = getLov(lov) || [{id: "Item 1", label: "Item 1"}, {id: "Item 2", label: "Item 2"}];
+    const lovList = getLov(lov) || [
+        { id: "Item 1", label: "Item 1" },
+        { id: "Item 2", label: "Item 2" },
+    ];
 
     return parseBooleanProperty(theme) ? (
         <ThemeToggle {...props} />

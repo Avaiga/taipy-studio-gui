@@ -10,56 +10,58 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-
 import { Box, ThemeProvider } from "@mui/material";
-import { LocalizationProvider } from "@mui/x-date-pickers";
 import GlobalStyles from "@mui/material/GlobalStyles";
+import { LocalizationProvider } from "@mui/x-date-pickers";
 import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
 import { ComponentType, useEffect } from "react";
 import JsxParser from "react-jsx-parser";
+import { useDarkMode } from "usehooks-ts";
+
 import Button from "./Taipy/Button";
 import Chart from "./Taipy/Chart";
 import DateSelector from "./Taipy/DateSelector";
 import Expandable from "./Taipy/Expandable";
 import Field from "./Taipy/Field";
+import FileDownload from "./Taipy/FileDownload";
+import FileSelector from "./Taipy/FileSelector";
+import Image from "./Taipy/Image";
+import Indicator from "./Taipy/Indicator";
 import Input from "./Taipy/Input";
 import Layout from "./Taipy/Layout";
 import Number from "./Taipy/Number";
 import Pane from "./Taipy/Pane";
 import Part from "./Taipy/Part";
+import Selector from "./Taipy/Selector";
+import Slider from "./Taipy/Slider";
 import Table from "./Taipy/Table";
+import Toggle from "./Taipy/Toggle";
 import { renderError, unregisteredRender } from "./Taipy/Unregistered";
 import { getUserTheme } from "./themes";
-import FileDownload from "./Taipy/FileDownload";
-import FileSelector from "./Taipy/FileSelector";
-import Image from "./Taipy/Image";
-import Toggle from "./Taipy/Toggle";
-import { useDarkMode } from "usehooks-ts";
-import Slider from "./Taipy/Slider";
-import Indicator from "./Taipy/Indicator";
 
 interface AppProps {
     jsx: string;
 }
 
 export const JSXSupportedComponent: Record<string, unknown> = {
-    taipy_text: Field,
     taipy_button: Button,
-    taipy_number: Number,
-    taipy_input: Input,
-    taipy_table: Table,
     taipy_chart: Chart,
-    taipy_part: Part,
-    taipy_expandable: Expandable,
-    taipy_pane: Pane,
-    taipy_layout: Layout,
     taipy_date: DateSelector,
+    taipy_expandable: Expandable,
     taipy_file_download: FileDownload,
     taipy_file_selector: FileSelector,
     taipy_image: Image,
-    taipy_toggle: Toggle,
-    taipy_slider: Slider,
     taipy_indicator: Indicator,
+    taipy_input: Input,
+    taipy_layout: Layout,
+    taipy_number: Number,
+    taipy_pane: Pane,
+    taipy_part: Part,
+    taipy_selector: Selector,
+    taipy_slider: Slider,
+    taipy_table: Table,
+    taipy_toggle: Toggle,
+    taipy_text: Field,
 };
 
 const mainSx = {
