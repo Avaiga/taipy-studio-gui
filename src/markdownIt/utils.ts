@@ -18,11 +18,6 @@ import { getLog } from "../gui/logging";
 import { CSV_DELIMITER, DATA_FILE_TYPES } from "./constant";
 import { parse as csvParse } from "csv-parse/sync";
 
-// export const camelize = (text: string): string => {
-//     const a = text.toLowerCase().replace(/[-_\s.]+(.)?/g, (_, c) => (c ? c.toUpperCase() : ""));
-//     return a.substring(0, 1).toLowerCase() + a.substring(1);
-// };
-
 export const camelize = (text: string): string => {
     return text.replace(/^([A-Z])|[\s-_]+(\w)/g, function (match, p1, p2, offset) {
         if (p2) {
