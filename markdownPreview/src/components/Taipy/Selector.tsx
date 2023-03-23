@@ -21,7 +21,7 @@ import MenuItem from "@mui/material/MenuItem";
 import OutlinedInput from "@mui/material/OutlinedInput";
 import Paper from "@mui/material/Paper";
 import Select, { SelectChangeEvent } from "@mui/material/Select";
-import React, { CSSProperties, useCallback, useEffect, useMemo, useState } from "react";
+import React, { CSSProperties, MouseEvent, useCallback, useEffect, useMemo, useState } from "react";
 
 import { LovProps } from "./utils";
 import { parseBooleanProperty } from "./utils/booleanUtils";
@@ -96,6 +96,27 @@ const Selector = (props: SelTreeProps) => {
         }
         setSelectedValue(Array.isArray(parsedValue) ? parsedValue : [parsedValue]);
     }, []);
+
+    const clickHandler = useCallback(
+        (evt: MouseEvent<HTMLElement>) => {
+            const { id: key = "" } = evt.currentTarget.dataset;
+            setSelectedValue((keys) => {
+                if (multiple) {
+                    const newKeys = [...keys];
+                    const p = newKeys.indexOf(key);
+                    if (p === -1) {
+                        newKeys.push(key);
+                    } else {
+                        newKeys.splice(p, 1);
+                    }
+                    return newKeys;
+                } else {
+                    return [key];
+                }
+            });
+        },
+        [multiple],
+    );
 
     const handleChange = useCallback((event: SelectChangeEvent<typeof selectedValue>) => {
         const {
@@ -176,6 +197,7 @@ const Selector = (props: SelTreeProps) => {
                                         value={elt.id}
                                         item={elt}
                                         selectedValue={selectedValue}
+                                        clickHandler={clickHandler}
                                         disabled={false}
                                     />
                                 ) : (
@@ -184,6 +206,7 @@ const Selector = (props: SelTreeProps) => {
                                         value={elt.id}
                                         item={elt}
                                         selectedValue={selectedValue}
+                                        clickHandler={clickHandler}
                                         disabled={false}
                                     />
                                 ),

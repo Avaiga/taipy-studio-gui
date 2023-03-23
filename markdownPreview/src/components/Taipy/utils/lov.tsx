@@ -10,7 +10,7 @@ import {
     Tooltip,
     TypographyProps,
 } from "@mui/material";
-import { CSSProperties, useMemo } from "react";
+import { CSSProperties, MouseEvent, useMemo } from "react";
 
 import { Icon, IconAvatar, avatarSx } from "./icon";
 
@@ -80,6 +80,7 @@ export const showItem = (elt: LovItem, searchValue: string) => {
 
 export interface ItemProps {
     value: string;
+    clickHandler: (evt: MouseEvent<HTMLElement>) => void;
     selectedValue: string[] | string;
     item: LovItem;
     disabled: boolean;
@@ -89,6 +90,7 @@ export interface ItemProps {
 
 export const SingleItem = ({
     value,
+    clickHandler,
     selectedValue,
     item,
     disabled,
@@ -96,6 +98,7 @@ export const SingleItem = ({
     titleTypographyProps,
 }: ItemProps) => (
     <ListItemButton
+        onClick={clickHandler}
         data-id={value}
         selected={Array.isArray(selectedValue) ? selectedValue.indexOf(value) !== -1 : selectedValue === value}
         disabled={disabled}
@@ -125,8 +128,8 @@ export const SingleItem = ({
     </ListItemButton>
 );
 
-export const MultipleItem = ({ value, selectedValue, item, disabled }: ItemProps) => (
-    <ListItemButton data-id={value} dense disabled={disabled}>
+export const MultipleItem = ({ value, clickHandler, selectedValue, item, disabled }: ItemProps) => (
+    <ListItemButton onClick={clickHandler} data-id={value} dense disabled={disabled}>
         <ListItemIcon>
             <Checkbox
                 disabled={disabled}

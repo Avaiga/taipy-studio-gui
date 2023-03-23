@@ -29,6 +29,7 @@ import Image from "./Taipy/Image";
 import Indicator from "./Taipy/Indicator";
 import Input from "./Taipy/Input";
 import Layout from "./Taipy/Layout";
+import Menu from "./Taipy/Menu";
 import Number from "./Taipy/Number";
 import Pane from "./Taipy/Pane";
 import Part from "./Taipy/Part";
@@ -54,6 +55,7 @@ export const JSXSupportedComponent: Record<string, unknown> = {
     taipy_indicator: Indicator,
     taipy_input: Input,
     taipy_layout: Layout,
+    taipy_menu: Menu,
     taipy_number: Number,
     taipy_pane: Pane,
     taipy_part: Part,
