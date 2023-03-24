@@ -31,6 +31,7 @@ import Indicator from "./Taipy/Indicator";
 import Input from "./Taipy/Input";
 import Layout from "./Taipy/Layout";
 import Menu from "./Taipy/Menu";
+import MenuCtl from "./Taipy/MenuCtl";
 import NavBar from "./Taipy/NavBar";
 import Number from "./Taipy/Number";
 import Pane from "./Taipy/Pane";
@@ -59,7 +60,7 @@ export const JSXSupportedComponent: Record<string, unknown> = {
     taipy_indicator: Indicator,
     taipy_input: Input,
     taipy_layout: Layout,
-    taipy_menu: Menu,
+    taipy_menu: MenuCtl,
     taipy_navbar: NavBar,
     taipy_number: Number,
     taipy_pane: Pane,
@@ -86,6 +87,7 @@ const App = (props: AppProps) => {
     const { jsx } = props;
     const { isDarkMode, enable, disable } = useDarkMode();
     const [_, setBaseHref] = useSessionStorage("baseHref", "");
+    const [menuProps, _setMenuProps] = useSessionStorage("menu", "");
     useEffect(() => {
         document.body.classList.contains("vscode-dark") ? enable() : disable();
         setBaseHref(props.baseHref);
@@ -107,6 +109,11 @@ const App = (props: AppProps) => {
                 <LocalizationProvider dateAdapter={AdapterDateFns}>
                     <Box style={containerSx} className={themeClass}>
                         <CssBaseline />
+                        {menuProps ? (
+                            <ErrorBoundary FallbackComponent={ErrorFallback}>
+                                <Menu {...JSON.parse(menuProps)} />
+                            </ErrorBoundary>
+                        ) : null}
                         <Box component="main" sx={mainSx}>
                             <ErrorBoundary FallbackComponent={ErrorFallback}>
                                 <JsxParser
