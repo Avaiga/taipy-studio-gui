@@ -42,7 +42,7 @@ export const parseMockData = (value: string): string => {
             flag: "r",
         });
         const mockContent = JSON.parse(content);
-        if (!mockContent?.data) {
+        if (!mockContent) {
             return value;
         }
         const mockData = mockContent as Record<string, any>;
