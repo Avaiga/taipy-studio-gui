@@ -10,30 +10,30 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-
+import { findBestMatch } from "string-similarity";
 import {
-    commands,
     Diagnostic,
     DiagnosticCollection,
     DiagnosticSeverity,
     ExtensionContext,
-    l10n,
-    languages,
     Position,
     Range,
     SymbolInformation,
     SymbolKind,
     TextDocument,
+    commands,
+    l10n,
+    languages,
     window,
     workspace,
 } from "vscode";
-import { findBestMatch } from "string-similarity";
+
 import { LanguageId } from "./constant";
 import { ElementProvider } from "./elementProvider";
 
-const CONTROL_RE = /<\|(.*?)\|>/;
-const OPENING_TAG_RE = /<([0-9a-zA-Z\_\.]*)\|((?:(?!\|>).)*)\s*$/;
-const CLOSING_TAG_RE = /^\s*\|([0-9a-zA-Z\_\.]*)>/;
+export const CONTROL_RE = /<\|(.*?)\|>/;
+export const OPENING_TAG_RE = /<([0-9a-zA-Z\_\.]*)\|((?:(?!\|>).)*)\s*$/;
+export const CLOSING_TAG_RE = /^\s*\|([0-9a-zA-Z\_\.]*)>/;
 const SPLIT_RE = /(?<!\\\\)\|/;
 export const PROPERTY_RE = /((?:don'?t|not)\s+)?([a-zA-Z][\.a-zA-Z_$0-9]*(?:\[(?:.*?)\])?)\s*(?:=(.*))?$/;
 export const PROPERTY_NAME_RE = /([a-zA-Z][\.a-zA-Z_$0-9]*)(?:\[(.*?)\])?/;
@@ -56,7 +56,7 @@ interface TaipyElement {
     properties: TaipyElementProperty[];
 }
 
-const buildEmptyTaipyElement = (): TaipyElement => {
+export const buildEmptyTaipyElement = (): TaipyElement => {
     return { value: "", type: "", properties: [] };
 };
 
@@ -76,9 +76,11 @@ export enum DiagnosticCode {
 
 export const registerDiagnostics = async (context: ExtensionContext): Promise<void> => {
     const mdDiagnosticCollection = languages.createDiagnosticCollection("taipy-gui-markdown");
-    const didOpen = workspace.onDidOpenTextDocument(async (doc) => await refreshDiagnostics(doc, mdDiagnosticCollection));
+    const didOpen = workspace.onDidOpenTextDocument(
+        async (doc) => await refreshDiagnostics(doc, mdDiagnosticCollection),
+    );
     const didChange = workspace.onDidChangeTextDocument(
-        async (e) => await refreshDiagnostics(e.document, mdDiagnosticCollection)
+        async (e) => await refreshDiagnostics(e.document, mdDiagnosticCollection),
     );
     const didClose = workspace.onDidCloseTextDocument((doc) => mdDiagnosticCollection.delete(doc.uri));
     window.activeTextEditor && (await refreshDiagnostics(window.activeTextEditor.document, mdDiagnosticCollection));
@@ -103,10 +105,15 @@ const getMdDiagnostics = (doc: TextDocument): Diagnostic[] => {
 const getPyDiagnostics = async (doc: TextDocument): Promise<Diagnostic[]> => {
     const text = doc.getText();
     const d: Diagnostic[] = [];
-    const symbols = (await commands.executeCommand("vscode.executeDocumentSymbolProvider", doc.uri)) as SymbolInformation[];
-    const quotePositions: Position[] = text.split(/\r?\n/).reduce<Position[]>((obj: Position[], v: string, i: number) => {
-        return [...obj, ...Array.from(v.matchAll(new RegExp('"""', "g")), (a) => new Position(i, a.index || 0))];
-    }, []);
+    const symbols = (await commands.executeCommand(
+        "vscode.executeDocumentSymbolProvider",
+        doc.uri,
+    )) as SymbolInformation[];
+    const quotePositions: Position[] = text
+        .split(/\r?\n/)
+        .reduce<Position[]>((obj: Position[], v: string, i: number) => {
+            return [...obj, ...Array.from(v.matchAll(new RegExp('"""', "g")), (a) => new Position(i, a.index || 0))];
+        }, []);
     if (quotePositions.length % 2 !== 0) {
         return [];
     }
@@ -116,7 +123,7 @@ const getPyDiagnostics = async (doc: TextDocument): Promise<Diagnostic[]> => {
                 content: getTextFromPositions(text, quotePositions[i], quotePositions[i + 1]),
                 initialPosition: quotePositions[i].translate(0, 3),
                 symbols: symbols,
-            })
+            }),
         );
     }
     return d;
@@ -138,7 +145,7 @@ const getSectionDiagnostics = (diagnosticSection: DiagnosticSection): Diagnostic
                 const [d, e] = processElement(
                     openingTagProperty,
                     new Position(lineCount, line.indexOf(openingTagProperty)),
-                    initialPosition
+                    initialPosition,
                 );
                 element = e;
                 if (element.type === "text") {
@@ -160,9 +167,9 @@ const getSectionDiagnostics = (diagnosticSection: DiagnosticSection): Diagnostic
                         DiagnosticCode.missCSyntax,
                         getRangeFromPosition(
                             initialPosition,
-                            getRangeOfStringInline(line, openingTagSearch[0], new Position(lineCount, 0))
-                        )
-                    )
+                            getRangeOfStringInline(line, openingTagSearch[0], new Position(lineCount, 0)),
+                        ),
+                    ),
                 );
             }
         }
@@ -172,7 +179,7 @@ const getSectionDiagnostics = (diagnosticSection: DiagnosticSection): Diagnostic
                 elementMatch[1],
                 new Position(lineCount, line.indexOf(elementMatch[1])),
                 initialPosition,
-                diagnosticSection.symbols
+                diagnosticSection.symbols,
             );
             diagnostics.push(...d);
         }
@@ -187,9 +194,9 @@ const getSectionDiagnostics = (diagnosticSection: DiagnosticSection): Diagnostic
                         DiagnosticCode.missOTag,
                         getRangeFromPosition(
                             initialPosition,
-                            getRangeOfStringInline(line, closingTagSearch[0], new Position(lineCount, 0))
-                        )
-                    )
+                            getRangeOfStringInline(line, closingTagSearch[0], new Position(lineCount, 0)),
+                        ),
+                    ),
                 );
                 return;
             }
@@ -202,9 +209,9 @@ const getSectionDiagnostics = (diagnosticSection: DiagnosticSection): Diagnostic
                         DiagnosticCode.missOTagId,
                         getRangeFromPosition(
                             initialPosition,
-                            getRangeOfStringInline(line, closingTagSearch[0], new Position(lineCount, 0))
-                        )
-                    )
+                            getRangeOfStringInline(line, closingTagSearch[0], new Position(lineCount, 0)),
+                        ),
+                    ),
                 );
             }
             if (tagId && !closeTagId) {
@@ -212,8 +219,8 @@ const getSectionDiagnostics = (diagnosticSection: DiagnosticSection): Diagnostic
                     createWarningDiagnostic(
                         l10n.t("Missing matching closing tag identifier '{0}'", tagId),
                         DiagnosticCode.missCTagId,
-                        getRangeFromPosition(p, inlineP)
-                    )
+                        getRangeFromPosition(p, inlineP),
+                    ),
                 );
             }
             if (closeTagId && tagId && tagId !== closeTagId) {
@@ -223,16 +230,16 @@ const getSectionDiagnostics = (diagnosticSection: DiagnosticSection): Diagnostic
                         DiagnosticCode.unmatchedOTagId,
                         getRangeFromPosition(
                             initialPosition,
-                            getRangeOfStringInline(line, closingTagSearch[0], new Position(lineCount, 0))
-                        )
-                    )
+                            getRangeOfStringInline(line, closingTagSearch[0], new Position(lineCount, 0)),
+                        ),
+                    ),
                 );
                 diagnostics.push(
                     createWarningDiagnostic(
                         l10n.t("Unmatched closing tag identifier '{0}'", closeTagId),
                         DiagnosticCode.unmatchedCTagId,
-                        getRangeFromPosition(p, inlineP)
-                    )
+                        getRangeFromPosition(p, inlineP),
+                    ),
                 );
             }
         }
@@ -244,27 +251,27 @@ const getSectionDiagnostics = (diagnosticSection: DiagnosticSection): Diagnostic
                 createWarningDiagnostic(
                     l10n.t("Missing closing tag for opened tag '{0}'", tagId),
                     DiagnosticCode.missCTagId,
-                    getRangeFromPosition(p, inlineP)
-                )
+                    getRangeFromPosition(p, inlineP),
+                ),
             );
         } else {
             diagnostics.push(
                 createWarningDiagnostic(
                     l10n.t("Missing closing tag", tagId),
                     DiagnosticCode.missCTag,
-                    getRangeFromPosition(p, inlineP)
-                )
+                    getRangeFromPosition(p, inlineP),
+                ),
             );
         }
     }
     return diagnostics;
 };
 
-const processElement = (
+export const processElement = (
     s: string,
-    inlinePosition: Position,
-    initialPosition: Position,
-    symbols: SymbolInformation[] | undefined = undefined
+    inlinePosition: Position = new Position(0, 0),
+    initialPosition: Position = new Position(0, 0),
+    symbols: SymbolInformation[] | undefined = undefined,
 ): [Diagnostic[], TaipyElement] => {
     const d: Diagnostic[] = [];
     const fragments = s.split(SPLIT_RE).filter((v) => !!v);
@@ -284,8 +291,8 @@ const processElement = (
                 createWarningDiagnostic(
                     l10n.t("Invalid property format"),
                     DiagnosticCode.invalidPropertyFormat,
-                    getRangeFromPosition(initialPosition, getRangeOfStringInline(s, fragment, inlinePosition))
-                )
+                    getRangeFromPosition(initialPosition, getRangeOfStringInline(s, fragment, inlinePosition)),
+                ),
             );
             return;
         }
@@ -307,9 +314,9 @@ const processElement = (
                     DiagnosticCode.invalidPropertyName,
                     getRangeFromPosition(
                         initialPosition,
-                        getRangeOfStringInline(fragment, propName, inlinePosition.translate(0, s.indexOf(fragment)))
-                    )
-                )
+                        getRangeOfStringInline(fragment, propName, inlinePosition.translate(0, s.indexOf(fragment))),
+                    ),
+                ),
             );
             return;
         }
@@ -320,18 +327,23 @@ const processElement = (
                     DiagnosticCode.ignoreNegatedValue,
                     getRangeFromPosition(
                         initialPosition,
-                        getRangeOfStringInline(fragment, notPrefix, inlinePosition.translate(0, s.indexOf(fragment)))
-                    )
-                )
+                        getRangeOfStringInline(fragment, notPrefix, inlinePosition.translate(0, s.indexOf(fragment))),
+                    ),
+                ),
             );
         }
-        if (propName.startsWith("on_") && !val.includes("lambda") && symbols && !symbols.some((s) => s.name === val && s.kind === SymbolKind.Function)) {
+        if (
+            propName.startsWith("on_") &&
+            !val.includes("lambda") &&
+            symbols &&
+            !symbols.some((s) => s.name === val && s.kind === SymbolKind.Function)
+        ) {
             d.push(
                 createWarningDiagnostic(
                     l10n.t("Function '{0}' in property '{1}' is not available", val, propName),
                     DiagnosticCode.functionNotFound,
-                    getRangeFromPosition(initialPosition, getRangeOfStringInline(s, fragment, inlinePosition))
-                )
+                    getRangeFromPosition(initialPosition, getRangeOfStringInline(s, fragment, inlinePosition)),
+                ),
             );
         }
         e.properties.push({ name: propName, value: notPrefix ? "False" : val ? val : "True" });
@@ -355,7 +367,7 @@ const getRangeOfStringInline = (s: string, subString: string, initialPosition: P
         initialPosition.line,
         initialPosition.character + s.indexOf(subString),
         initialPosition.line,
-        initialPosition.character + s.indexOf(subString) + subString.length
+        initialPosition.character + s.indexOf(subString) + subString.length,
     );
 };
 
@@ -364,7 +376,7 @@ const getRangeFromPosition = (initialPosition: Position, range: Range): Range =>
         initialPosition.line + range.start.line,
         range.start.line === 0 ? initialPosition.character + range.start.character : range.start.character,
         initialPosition.line + range.end.line,
-        range.end.character
+        range.end.character,
     );
 };
 

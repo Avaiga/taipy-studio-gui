@@ -10,24 +10,24 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-
 import { existsSync } from "fs";
 import path from "path";
 import {
     CancellationToken,
-    commands,
     CompletionItem,
     CompletionItemKind,
     CompletionItemProvider,
     ExtensionContext,
-    languages,
     MarkdownString,
     Position,
     SymbolInformation,
     SymbolKind,
     TextDocument,
     Uri,
+    commands,
+    languages,
 } from "vscode";
+
 import { LanguageId } from "./constant";
 import { ElementProvider } from "./elementProvider";
 import { markdownDocumentFilter, parseProperty, pythonDocumentFilter } from "./utils";
@@ -42,8 +42,8 @@ export class GuiCompletionItemProvider implements CompletionItemProvider {
                 new GuiCompletionItemProvider(LanguageId.md),
                 "|",
                 "{",
-                "="
-            )
+                "=",
+            ),
         );
         context.subscriptions.push(
             languages.registerCompletionItemProvider(
@@ -51,8 +51,8 @@ export class GuiCompletionItemProvider implements CompletionItemProvider {
                 new GuiCompletionItemProvider(LanguageId.py),
                 "|",
                 "{",
-                "="
-            )
+                "=",
+            ),
         );
     }
 
@@ -61,7 +61,7 @@ export class GuiCompletionItemProvider implements CompletionItemProvider {
     public async provideCompletionItems(
         document: TextDocument,
         position: Position,
-        token: CancellationToken
+        token: CancellationToken,
     ): Promise<CompletionItem[]> {
         const line = document.lineAt(position).text;
         const linePrefix = line.slice(0, position.character);
@@ -77,15 +77,29 @@ export class GuiCompletionItemProvider implements CompletionItemProvider {
     }
 
     private async getMarkdownCompletion(document: TextDocument, linePrefix: string): Promise<CompletionItem[]> {
-        const potentialPythonFile = path.join(path.dirname(document.uri.fsPath), path.parse(document.fileName).name + ".py");
+        const potentialPythonFile = path.join(
+            path.dirname(document.uri.fsPath),
+            path.parse(document.fileName).name + ".py",
+        );
         // variable name completion
         if (existsSync(potentialPythonFile)) {
             if (linePrefix.endsWith("{")) {
-                return await this.getSymbols(Uri.file(potentialPythonFile), SymbolKind.Variable, CompletionItemKind.Variable);
+                return await this.getSymbols(
+                    Uri.file(potentialPythonFile),
+                    SymbolKind.Variable,
+                    CompletionItemKind.Variable,
+                );
             }
             // function name for 'on_*' properties
-            if (linePrefix.endsWith("=") && ElementProvider.getOnFunctionList().some((v) => linePrefix.endsWith(v + "="))) {
-                return await this.getSymbols(Uri.file(potentialPythonFile), SymbolKind.Function, CompletionItemKind.Function);
+            if (
+                linePrefix.endsWith("=") &&
+                ElementProvider.getOnFunctionList().some((v) => linePrefix.endsWith(v + "="))
+            ) {
+                return await this.getSymbols(
+                    Uri.file(potentialPythonFile),
+                    SymbolKind.Function,
+                    CompletionItemKind.Function,
+                );
             }
         }
         return this.getCommonCompletion(document, linePrefix);
@@ -127,7 +141,7 @@ export class GuiCompletionItemProvider implements CompletionItemProvider {
                         .map((v) => {
                             let completionItem = new CompletionItem(v, CompletionItemKind.Property);
                             completionItem.documentation = new MarkdownString(
-                                parseProperty(properties[v as keyof typeof properties])
+                                parseProperty(properties[v as keyof typeof properties]),
                             );
                             return completionItem;
                         });
@@ -140,9 +154,12 @@ export class GuiCompletionItemProvider implements CompletionItemProvider {
     private async getSymbols(
         uri: Uri,
         symbolKind: SymbolKind,
-        completionItemKind: CompletionItemKind
+        completionItemKind: CompletionItemKind,
     ): Promise<CompletionItem[]> {
-        const symbols = (await commands.executeCommand("vscode.executeDocumentSymbolProvider", uri)) as SymbolInformation[];
+        const symbols = (await commands.executeCommand(
+            "vscode.executeDocumentSymbolProvider",
+            uri,
+        )) as SymbolInformation[];
         return !symbols
             ? []
             : symbols.filter((v) => v.kind === symbolKind).map((v) => new CompletionItem(v.name, completionItemKind));

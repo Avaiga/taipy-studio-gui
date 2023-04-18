@@ -10,16 +10,23 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
-import { GuiContext } from "./gui";
+import type MarkdownIt from "markdown-it";
 import { ExtensionContext } from "vscode";
+
+import { GuiContext } from "./gui";
+import MarkdownItStudioGui from "./markdownIt";
 
 // This method is called when your extension is activated
 // Your extension is activated the very first time the command is executed
 export async function activate(context: ExtensionContext) {
     GuiContext.register(context);
+    return {
+        extendMarkdownIt(md: MarkdownIt) {
+            return md.use(MarkdownItStudioGui);
+        },
+    };
 }
 
 // This method is called when your extension is deactivated
