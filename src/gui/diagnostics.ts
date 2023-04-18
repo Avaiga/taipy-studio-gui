@@ -325,7 +325,7 @@ const processElement = (
                 )
             );
         }
-        if (propName.startsWith("on_") && symbols && !symbols.some((s) => s.name === val && s.kind === SymbolKind.Function)) {
+        if (propName.startsWith("on_") && !val.includes("lambda") && symbols && !symbols.some((s) => s.name === val && s.kind === SymbolKind.Function)) {
             d.push(
                 createWarningDiagnostic(
                     l10n.t("Function '{0}' in property '{1}' is not available", val, propName),
