@@ -64,8 +64,12 @@ jobs:
       - name: Install node_modules
         run: npm ci --include=dev
 
+      - name: Install md-preview dependencies
+        working-directory: ./markdownPreview
+        run: npm run inst-ci
+
       - name: Build the package
-        run: npm run package
+        run: npm run build-publish
 
       - name: Publish
         run: npm run prerelease-deploy
