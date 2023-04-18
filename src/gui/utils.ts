@@ -10,10 +10,10 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-
 import { exec } from "child_process";
 import { existsSync, readFileSync } from "fs";
 import { DocumentFilter, l10n, workspace } from "vscode";
+
 import { CONFIG_NAME } from "./constant";
 import { getLog } from "./logging";
 
@@ -36,20 +36,18 @@ interface ElementDetail {
 
 // visual elements parser
 export const getElementProperties = (visualElements: object): Record<string, Record<string, ElementProperty>> => {
-    const blocks: Record<string, ElementDetail> = (visualElements["blocks" as keyof typeof visualElements] as any).reduce(
-        (obj: Record<string, ElementDetail>, v: any) => {
-            obj[v[0]] = v[1];
-            return obj;
-        },
-        {} as Record<string, ElementDetail>
-    );
-    const controls: Record<string, ElementDetail> = (visualElements["controls" as keyof typeof visualElements] as any).reduce(
-        (obj: Record<string, ElementDetail>, v: any) => {
-            obj[v[0]] = v[1];
-            return obj;
-        },
-        {} as Record<string, ElementDetail>
-    );
+    const blocks: Record<string, ElementDetail> = (
+        visualElements["blocks" as keyof typeof visualElements] as any
+    ).reduce((obj: Record<string, ElementDetail>, v: any) => {
+        obj[v[0]] = v[1];
+        return obj;
+    }, {} as Record<string, ElementDetail>);
+    const controls: Record<string, ElementDetail> = (
+        visualElements["controls" as keyof typeof visualElements] as any
+    ).reduce((obj: Record<string, ElementDetail>, v: any) => {
+        obj[v[0]] = v[1];
+        return obj;
+    }, {} as Record<string, ElementDetail>);
     const undocumented: Record<string, ElementDetail> = (
         visualElements["undocumented" as keyof typeof visualElements] as any
     ).reduce((obj: Record<string, ElementDetail>, v: any) => {
@@ -71,11 +69,15 @@ export const getElementProperties = (visualElements: object): Record<string, Rec
 };
 
 export const getBlockElementList = (visualElements: object): string[] => {
-    return (visualElements["blocks" as keyof typeof visualElements] as typeof Object[]).map((v: any) => v[0] as string);
+    return (visualElements["blocks" as keyof typeof visualElements] as (typeof Object)[]).map(
+        (v: any) => v[0] as string,
+    );
 };
 
 export const getControlElementList = (visualElements: object): string[] => {
-    return (visualElements["controls" as keyof typeof visualElements] as typeof Object[]).map((v: any) => v[0] as string);
+    return (visualElements["controls" as keyof typeof visualElements] as (typeof Object)[]).map(
+        (v: any) => v[0] as string,
+    );
 };
 
 export const getElementList = (visualElements: object): string[] => {
@@ -102,7 +104,7 @@ const handleElementDetailInherits = (
     inherits: string[] | undefined,
     blocks: Record<string, ElementDetail>,
     controls: Record<string, ElementDetail>,
-    undocumented: Record<string, ElementDetail>
+    undocumented: Record<string, ElementDetail>,
 ): Record<string, ElementProperty> => {
     let properties: Record<string, ElementProperty> = {};
     if (!inherits) {
@@ -126,7 +128,7 @@ const getElementDetailProperties = (
     elementDetail: ElementDetail,
     blocks: Record<string, ElementDetail>,
     controls: Record<string, ElementDetail>,
-    undocumented: Record<string, ElementDetail>
+    undocumented: Record<string, ElementDetail>,
 ): Record<string, ElementProperty> => {
     return {
         ...parsePropertyList(elementDetail.properties),
@@ -148,7 +150,7 @@ export const getOnFunctionList = (elementProperties: Record<string, Record<strin
 };
 
 export const getOnFunctionSignature = (
-    elementProperties: Record<string, Record<string, ElementProperty>>
+    elementProperties: Record<string, Record<string, ElementProperty>>,
 ): Record<string, [string, string][]> => {
     const onFunctionRecord: Record<string, [string, string][]> = {};
     for (const key in elementProperties) {

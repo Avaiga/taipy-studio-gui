@@ -10,9 +10,9 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-
 import { join } from "path";
-import { commands, ExtensionContext, l10n, ProgressLocation, window, workspace, WorkspaceEdit } from "vscode";
+import { ExtensionContext, ProgressLocation, WorkspaceEdit, commands, l10n, window, workspace } from "vscode";
+
 import { ElementProvider } from "./elementProvider";
 import { getLog } from "./logging";
 import { countChar, execShell, parseProperty, updateFilePath } from "./utils";
@@ -30,7 +30,7 @@ export class GenerateGuiCommand {
 
     private constructor(readonly context: ExtensionContext) {
         context.subscriptions.push(
-            commands.registerCommand("taipy.gui.md.generate", GenerateGuiCommand.handleGenerateElementCommand)
+            commands.registerCommand("taipy.gui.md.generate", GenerateGuiCommand.handleGenerateElementCommand),
         );
     }
 
@@ -108,7 +108,7 @@ export class FindElementsFileCommand {
 
     private constructor(readonly context: ExtensionContext) {
         context.subscriptions.push(
-            commands.registerCommand("taipy.gui.md.findElementFile", FindElementsFileCommand.commandEntry)
+            commands.registerCommand("taipy.gui.md.findElementFile", FindElementsFileCommand.commandEntry),
         );
     }
 
@@ -117,7 +117,7 @@ export class FindElementsFileCommand {
         try {
             pythonPath = await commands.executeCommand(
                 "python.interpreterPath",
-                workspace.workspaceFolders?.map(({ uri }) => uri.fsPath)
+                workspace.workspaceFolders?.map(({ uri }) => uri.fsPath),
             );
         } catch (error: any) {
             getLog().info(l10n.t("Find element descriptors file: "), error.message || error);
@@ -131,24 +131,28 @@ export class FindElementsFileCommand {
             },
             async (progress) => {
                 try {
-                    const execResult = await execShell(`${pythonPath} ${join(__dirname, "assets", "find_element_file.py")}`);
+                    const execResult = await execShell(
+                        `${pythonPath} ${join(__dirname, "assets", "find_element_file.py")}`,
+                    );
                     if (execResult.startsWith("Path: ")) {
                         updateFilePath(execResult.substring(6));
                         window.showInformationMessage(
-                            l10n.t("Visual element descriptors file was found and updated in workspace settings")
+                            l10n.t("Visual element descriptors file was found and updated in workspace settings"),
                         );
                     } else if (execResult) {
                         window.showErrorMessage(execResult);
                     } else {
                         window.showErrorMessage(
-                            l10n.t("Can't find visual element descriptors file with the selected environment")
+                            l10n.t("Can't find visual element descriptors file with the selected environment"),
                         );
                     }
                 } catch (error: any) {
                     getLog().error(l10n.t("Find element descriptors file: "), error.message || error);
-                    window.showErrorMessage(l10n.t("Can't find visual element descriptors file with the selected environment"));
+                    window.showErrorMessage(
+                        l10n.t("Can't find visual element descriptors file with the selected environment"),
+                    );
                 }
-            }
+            },
         );
     }
 }

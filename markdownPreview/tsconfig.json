@@ -1,0 +1,28 @@
+/* tsconfig for Web Components Taipy's Visual Studio Code extension */
+{
+    "compilerOptions": {
+        "module": "CommonJS",
+        "target": "ES2021",
+        "outDir": "../dist",
+        "lib": ["ES2021", "DOM", "DOM.Iterable"],
+        "baseUrl": ".",
+        "sourceMap": true,
+        "strict": true /* enable all strict type-checking options */,
+        "jsx": "react-jsx",
+        "noUnusedParameters": true /* Report errors on unused parameters. */,
+        "noEmitHelpers": true,
+        "importHelpers": true,
+        "moduleResolution": "node",
+        "allowJs": true,
+        "skipLibCheck": true,
+        "esModuleInterop": true,
+        "allowSyntheticDefaultImports": true,
+        "forceConsistentCasingInFileNames": true,
+        "noFallthroughCasesInSwitch": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "noEmit": false
+    },
+    "include": ["src"],
+    "exclude": ["node_modules"]
+}

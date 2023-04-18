@@ -10,8 +10,8 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-
 import { LogOutputChannel, window } from "vscode";
 
 let outputChannel: LogOutputChannel;
-export const getLog = () => outputChannel || (outputChannel = window.createOutputChannel("Taipy Studio", {log: true}));
+export const getLog = () =>
+    outputChannel || (outputChannel = window.createOutputChannel("Taipy Studio", { log: true }));

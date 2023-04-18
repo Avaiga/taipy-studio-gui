@@ -10,7 +10,6 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-
 import {
     CancellationToken,
     CodeAction,
@@ -19,13 +18,13 @@ import {
     CodeActionProvider,
     Diagnostic,
     ExtensionContext,
-    l10n,
-    languages,
     Position,
     Range,
     Selection,
     TextDocument,
     WorkspaceEdit,
+    l10n,
+    languages,
 } from "vscode";
 
 import { DiagnosticCode, PROPERTY_RE } from "./diagnostics";
@@ -34,7 +33,10 @@ import { generateOnFunction, markdownDocumentFilter, pythonDocumentFilter } from
 
 export class MarkdownActionProvider implements CodeActionProvider {
     public static readonly providedCodeActionKinds = [CodeActionKind.QuickFix];
-    private readonly codeActionMap: Record<string, (document: TextDocument, diagnostic: Diagnostic) => CodeAction | null> = {
+    private readonly codeActionMap: Record<
+        string,
+        (document: TextDocument, diagnostic: Diagnostic) => CodeAction | null
+    > = {
         [DiagnosticCode.missCSyntax]: this.createMCSCodeAction,
         [DiagnosticCode.functionNotFound]: this.createFNFCodeAction,
         [DiagnosticCode.invalidPropertyName]: this.createPE02CodeAction,
@@ -45,12 +47,12 @@ export class MarkdownActionProvider implements CodeActionProvider {
         context.subscriptions.push(
             languages.registerCodeActionsProvider(markdownDocumentFilter, new MarkdownActionProvider(), {
                 providedCodeActionKinds: MarkdownActionProvider.providedCodeActionKinds,
-            })
+            }),
         );
         context.subscriptions.push(
             languages.registerCodeActionsProvider(pythonDocumentFilter, new MarkdownActionProvider(), {
                 providedCodeActionKinds: MarkdownActionProvider.providedCodeActionKinds,
-            })
+            }),
         );
     }
 
@@ -58,7 +60,7 @@ export class MarkdownActionProvider implements CodeActionProvider {
         document: TextDocument,
         range: Range | Selection,
         context: CodeActionContext,
-        token: CancellationToken
+        token: CancellationToken,
     ): CodeAction[] {
         const codeActions: CodeAction[] = [];
         context.diagnostics.forEach((diagnostic) => {
@@ -105,12 +107,15 @@ export class MarkdownActionProvider implements CodeActionProvider {
             .getText()
             .split(/\r?\n/)
             .reduce<Position[]>((obj: Position[], v: string, i: number) => {
-                return [...obj, ...Array.from(v.matchAll(new RegExp('"""', "g")), (a) => new Position(i, a.index || 0))];
+                return [
+                    ...obj,
+                    ...Array.from(v.matchAll(new RegExp('"""', "g")), (a) => new Position(i, a.index || 0)),
+                ];
             }, [])
             .filter(
                 (v) =>
                     v.line > diagnosticPosition.line ||
-                    (v.line === diagnosticPosition.line && v.character > diagnosticPosition.character)
+                    (v.line === diagnosticPosition.line && v.character > diagnosticPosition.character),
             );
         action.diagnostics = [diagnostic];
         action.isPreferred = true;
@@ -118,7 +123,11 @@ export class MarkdownActionProvider implements CodeActionProvider {
         action.edit.insert(
             document.uri,
             quotePositions.length > 0 ? quotePositions[0].translate(0, 3) : new Position(document.lineCount - 1, 0),
-            "\n\n" + generateOnFunction(ElementProvider.getOnFunctionSignature()[onFunctionType] || [["state", "State"]], functionName)
+            "\n\n" +
+                generateOnFunction(
+                    ElementProvider.getOnFunctionSignature()[onFunctionType] || [["state", "State"]],
+                    functionName,
+                ),
         );
         return action;
     }
@@ -143,7 +152,7 @@ export class MarkdownActionProvider implements CodeActionProvider {
         action.diagnostics = [diagnostic];
         action.isPreferred = true;
         action.edit = new WorkspaceEdit();
-        action.edit.replace(document.uri, diagnostic.range, '');
+        action.edit.replace(document.uri, diagnostic.range, "");
         return action;
     }
 }
