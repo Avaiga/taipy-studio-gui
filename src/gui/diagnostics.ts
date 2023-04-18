@@ -141,6 +141,9 @@ const getSectionDiagnostics = (diagnosticSection: DiagnosticSection): Diagnostic
                     initialPosition
                 );
                 element = e;
+                if (element.type === "text") {
+                    element.type = "part";
+                }
                 diagnostics.push(...d);
             }
             if (ElementProvider.getBlockElementList().includes(element.type)) {
