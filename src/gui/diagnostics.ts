@@ -148,6 +148,9 @@ const getSectionDiagnostics = (diagnosticSection: DiagnosticSection): Diagnostic
                     initialPosition,
                 );
                 element = e;
+                if (element.type === "text") {
+                    element.type = "part";
+                }
                 diagnostics.push(...d);
             }
             if (ElementProvider.getBlockElementList().includes(element.type)) {
@@ -331,6 +334,7 @@ export const processElement = (
         }
         if (
             propName.startsWith("on_") &&
+            !val.includes("lambda") &&
             symbols &&
             !symbols.some((s) => s.name === val && s.kind === SymbolKind.Function)
         ) {
