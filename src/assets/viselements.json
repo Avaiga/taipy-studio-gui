@@ -1093,63 +1093,63 @@
       }
     ],
     [
-      "scenario_selector",
-      {
-          "properties": [
-              {
-                "name": "id",
-                "type": "str",
-                "doc": "The identifier that will be assigned to the rendered HTML component."
-              },
-              {
-                "name": "class_name",
-                "type": "dynamic(str)",
-                "doc": "The list of CSS class names that will be associated with the generated HTML Element.<br/>These class names will be added to the default <code>taipy_gui_core-&lt;element_type&gt;</code>."
-              },
-              {
-                  "name": "value",
-                  "default_property": true,
-                  "type": "dynamic(List[Scenario])",
-                  "default_value": "[]",
-                  "doc": "TODO - The list of selected scenarios."
-              },
-              {
-                  "name": "show_add_button",
-                  "type": "dynamic(bool)",
-                  "default_value": "True",
-                  "doc": "TODO"
-              },
-              {
-                  "name": "display_cycles",
-                  "type": "dynamic(bool)",
-                  "default_value": "True",
-                  "doc": "TODO"
-              },
-              {
-                  "name": "show_primary_flag",
-                  "type": "dynamic(bool)",
-                  "default_value": "True",
-                  "doc": "TODO"
-              },
-              {
-                  "name": "on_change",
-                  "type": "Callback",
-                  "doc": "The name of a function that is triggered when the selection is updated.<br/>The parameters of that function are all optional:\nTODO",
-                  "signature": [
-                      [
-                          "TODO",
-                          ""
-                      ]
-                  ]
-              },
-              {
-                  "name": "height",
+        "scenario_selector",
+        {
+            "properties": [
+                {
+                  "name": "id",
                   "type": "str",
-                  "default_value": "50vh",
-                  "doc": "The maximum height (in CSS unit) of the tree."
-              }
-          ]
-      }
+                  "doc": "The identifier that will be assigned to the rendered HTML component."
+                },
+                {
+                  "name": "class_name",
+                  "type": "dynamic(str)",
+                  "doc": "The list of CSS class names that will be associated with the generated HTML Element.<br/>These class names will be added to the default <code>taipy_gui_core-&lt;element_type&gt;</code>."
+                },
+                {
+                    "name": "value",
+                    "default_property": true,
+                    "type": "dynamic(List[Scenario])",
+                    "default_value": "[]",
+                    "doc": "TODO - The list of selected scenarios."
+                },
+                {
+                    "name": "show_add_button",
+                    "type": "dynamic(bool)",
+                    "default_value": "True",
+                    "doc": "TODO"
+                },
+                {
+                    "name": "display_cycles",
+                    "type": "dynamic(bool)",
+                    "default_value": "True",
+                    "doc": "TODO"
+                },
+                {
+                    "name": "show_primary_flag",
+                    "type": "dynamic(bool)",
+                    "default_value": "True",
+                    "doc": "TODO"
+                },
+                {
+                    "name": "on_change",
+                    "type": "Callback",
+                    "doc": "The name of a function that is triggered when the selection is updated.<br/>The parameters of that function are all optional:\nTODO",
+                    "signature": [
+                        [
+                            "TODO",
+                            ""
+                        ]
+                    ]
+                },
+                {
+                    "name": "height",
+                    "type": "str",
+                    "default_value": "50vh",
+                    "doc": "The maximum height (in CSS unit) of the tree."
+                }
+            ]
+        }
     ],
     [
         "scenario",
