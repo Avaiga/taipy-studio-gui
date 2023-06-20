@@ -93,7 +93,7 @@ export const getTokenAttribute = (name: string, value: string): [string, string]
 const getOpeningToken = (content: string, tokenClass: typeof Token): Token[] => {
     let tokenNodes: Token[] = [],
         lastPos = 0;
-    content.replace(REPLACE_OPENING_TAG_RE, (match: string, offset: number): string => {
+    content.replace(REPLACE_OPENING_TAG_RE, (match: string, _p1: string, _p2: string, offset: number): string => {
         const regexMatchResult = OPENING_TAG_RE.exec(match);
         if (offset > lastPos) {
             let token = new tokenClass("text", "", 0);
@@ -122,7 +122,7 @@ const getOpeningToken = (content: string, tokenClass: typeof Token): Token[] => 
 const getControlToken = (content: string, tokenClass: typeof Token): Token[] => {
     let tokenNodes: Token[] = [],
         lastPos = 0;
-    content.replace(REPLACE_CONTROL_RE, (match: string, offset: number): string => {
+    content.replace(REPLACE_CONTROL_RE, (match: string, _p1: string, offset: number): string => {
         const regexMatchResult = CONTROL_RE.exec(match);
         if (offset > lastPos) {
             let token = new tokenClass("text", "", 0);
@@ -151,7 +151,7 @@ const getControlToken = (content: string, tokenClass: typeof Token): Token[] => 
 const getClosingToken = (content: string, tag: string, tokenClass: typeof Token): Token[] => {
     let tokenNodes: Token[] = [],
         lastPos = 0;
-    content.replace(REPLACE_CLOSING_TAG_RE, (match: string, offset: number): string => {
+    content.replace(REPLACE_CLOSING_TAG_RE, (match: string, _p1: string, offset: number): string => {
         if (offset > lastPos) {
             let token = new tokenClass("text", "", 0);
             token.content = content.slice(lastPos, offset);

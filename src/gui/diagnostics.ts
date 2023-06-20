@@ -300,7 +300,7 @@ export const processElement = (
 
         const propNameMatch = PROPERTY_NAME_RE.exec(propMatch[2]);
         const propName = propNameMatch ? propNameMatch[1] : propMatch[2];
-        const val = propMatch[3];
+        const val = propMatch[3] || "";
         const validPropertyList = Object.keys(ElementProvider.getElementProperties()[e.type] || []);
         if (validPropertyList.length !== 0 && !validPropertyList.includes(propName)) {
             const bestMatch = findBestMatch(propName, validPropertyList).bestMatch;

@@ -120,7 +120,7 @@ export class GuiCompletionItemProvider implements CompletionItemProvider {
     private async getCommonCompletion(document: TextDocument, linePrefix: string): Promise<CompletionItem[]> {
         if (linePrefix.endsWith("|")) {
             const foundElements = ElementProvider.getElementList().reduce((p: string[], c: string) => {
-                linePrefix.includes(`|${c}`) && p.push(c);
+                linePrefix.includes(`|${c}|`) && p.push(c);
                 return p;
             }, []);
             // element type completion
@@ -135,7 +135,8 @@ export class GuiCompletionItemProvider implements CompletionItemProvider {
                 if (properties !== undefined) {
                     return Object.keys(properties)
                         .reduce((p: string[], c: string) => {
-                            !linePrefix.includes(`|${c}`) && p.push(c);
+                            const PROP_MATCH = new RegExp(`\\|((?:don'?t|not)\\s+)?${c}\\s*(?:=(.*))?((?:\\|)?)`);
+                            !PROP_MATCH.test(linePrefix) && p.push(c);
                             return p;
                         }, [])
                         .map((v) => {
