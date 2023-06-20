@@ -1615,6 +1615,23 @@
           }
         ]
       }
+    ],
+    [
+      "core_gui_shared",
+      {
+        "properties": [
+          {
+            "name": "id",
+            "type": "str",
+            "doc": "The identifier that will be assigned to the rendered HTML component."
+          },
+          {
+            "name": "class_name",
+            "type": "dynamic(str)",
+            "doc": "The list of CSS class names that will be associated with the generated HTML Element.<br/>These class names will be added to the default <code>taipy_gui_core-&lt;element_type&gt;</code>."
+          }
+        ]
+      }
     ]
   ]
 }
