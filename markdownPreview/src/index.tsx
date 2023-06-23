@@ -15,14 +15,19 @@ import { createRoot } from "react-dom/client";
 import App from "./components/App";
 
 function init() {
-    const rootDiv = document.createElement("div", {});
-    rootDiv.setAttribute("id", "root");
-    const bodyInnerHTML = document.body.innerHTML;
-    const baseHref = (document.querySelector('base') || {}).href || "";
-    document.body.innerHTML = "";
-    document.body.appendChild(rootDiv);
+    const mdbd = document.getElementsByClassName("markdown-body");
+    const markdownBodyHTML = mdbd[mdbd.length - 1].outerHTML;
+    mdbd[mdbd.length - 1].remove();
+    const baseHref = (document.querySelector("base") || {}).href || "";
+    let rootDiv = document.querySelector("#root");
+    if (!rootDiv) {
+        rootDiv = document.createElement("div", {});
+        rootDiv.setAttribute("id", "root");
+        document.body.appendChild(rootDiv);
+    }
+    rootDiv.innerHTML = "";
     const root = createRoot(rootDiv);
-    root.render(<App jsx={bodyInnerHTML} baseHref={baseHref} />);
+    root.render(<App jsx={markdownBodyHTML} baseHref={baseHref} />);
 }
 
 window.addEventListener("vscode.markdown.updateContent", init);

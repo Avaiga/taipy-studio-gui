@@ -16,7 +16,7 @@ import { useEffect } from "react";
 import { useSessionStorage } from "usehooks-ts";
 
 const MenuCtl = (props: MenuProps) => {
-    const [_, setMenuProps] = useSessionStorage("menu", "");
+    const [_, setMenuProps] = useSessionStorage("menu", JSON.stringify({}));
     useEffect(() => {
         setMenuProps(JSON.stringify(props));
     }, []);

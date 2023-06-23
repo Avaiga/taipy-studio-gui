@@ -87,11 +87,16 @@ const App = (props: AppProps) => {
     const { jsx } = props;
     const { isDarkMode, enable, disable } = useDarkMode();
     const [_, setBaseHref] = useSessionStorage("baseHref", "");
-    const [menuProps, _setMenuProps] = useSessionStorage("menu", "");
+    const [menuProps, setMenuProps] = useSessionStorage("menu", JSON.stringify({}));
     useEffect(() => {
         document.body.classList.contains("vscode-dark") ? enable() : disable();
         setBaseHref(props.baseHref);
     }, []);
+    useEffect(() => {
+       if (!jsx.includes("<taipy_menu")) {
+            setMenuProps(JSON.stringify({}));
+       }
+    }, [jsx]);
     const theme = isDarkMode ? "dark" : "light";
     const themeClass = `taipy-${theme}`;
     const MuiTheme = userTheme[theme];
@@ -124,7 +129,8 @@ const App = (props: AppProps) => {
                                     allowUnknownElements={false}
                                     renderError={renderError}
                                     blacklistedAttrs={[]}
-                                    blacklistedTags={[]}
+                                    blacklistedTags={["svg"]}
+                                    autoCloseVoidElements={true}
                                 />
                             </ErrorBoundary>
                         </Box>
