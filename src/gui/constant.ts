@@ -15,14 +15,15 @@ import { join } from "path";
 import {
     getBlockElementList,
     getControlElementList,
-    getElementFile,
     getElementList,
     getElementProperties,
+    getElementsFromFile,
+    getEmptyVisualElements,
     getOnFunctionList,
     getOnFunctionSignature,
 } from "./utils";
 
-const visualElements = getElementFile(join(__dirname, "assets", "viselements.json")) || {};
+const visualElements = getElementsFromFile(join(__dirname, "assets", "viselements.json")) || getEmptyVisualElements();
 
 // object of all elements each with all of its properties
 export const defaultElementProperties = getElementProperties(visualElements);
