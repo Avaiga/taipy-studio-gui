@@ -239,8 +239,6 @@ export const getElementsFromFiles = (paths: string[]): VisualElements | undefine
     if (registeredPathCount === 0) {
         return undefined;
     }
-    console.log(paths);
-    console.log(visualElements);
     return visualElements;
 };
 
