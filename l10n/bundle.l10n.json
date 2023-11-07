@@ -8,10 +8,10 @@
   "Unmatched number of curly braces for expression": "Unmatched number of curly braces for expression",
   "Select properties for element '{0}'": "Select properties for element '{0}'",
   "Visual Element added": "Visual Element added",
-  "Find element descriptors file: ": "Find element descriptors file: ",
-  "Finding visual element descriptors file": "Finding visual element descriptors file",
-  "Visual element descriptors file was found and updated in workspace settings": "Visual element descriptors file was found and updated in workspace settings",
-  "Can't find visual element descriptors file with the selected environment": "Can't find visual element descriptors file with the selected environment",
+  "Find element descriptor files: ": "Find element descriptor files: ",
+  "Finding visual element descriptor files": "Finding visual element descriptor files",
+  "Visual element descriptor files was found and updated in workspace settings": "Visual element descriptor files was found and updated in workspace settings",
+  "Can't find visual element descriptor files with the selected environment": "Can't find visual element descriptor files with the selected environment",
   "Missing closing syntax": "Missing closing syntax",
   "Missing opening tag": "Missing opening tag",
   "Missing matching opening tag identifier '{0}'": "Missing matching opening tag identifier '{0}'",
@@ -25,6 +25,6 @@
   ". Do you mean '{0}'?": ". Do you mean '{0}'?",
   "Negated value of property '{0}' will be ignored": "Negated value of property '{0}' will be ignored",
   "Function '{0}' in property '{1}' is not available": "Function '{0}' in property '{1}' is not available",
-  "Parse element descriptors file: ": "Parse element descriptors file: ",
+  "Parse element descriptor files: ": "Parse element descriptor files: ",
   "Parse mock data file: ": "Parse mock data file: "
 }

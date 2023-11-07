@@ -15,11 +15,24 @@ import { existsSync, readFileSync } from "fs";
 import { DocumentFilter, l10n, workspace } from "vscode";
 
 import { CONFIG_NAME } from "./constant";
+import { ElementProvider } from "./elementProvider";
 import { getLog } from "./logging";
 
 export const countChar = (str: string, char: string): number => {
     return str.split(char).length - 1;
 };
+
+export interface VisualElements {
+    blocks?: [string, ElementDetail][];
+    controls?: [string, ElementDetail][];
+    undocumented?: [string, ElementDetail][];
+}
+
+interface ElementDetail {
+    properties?: ElementProperty[];
+    inherits?: string[];
+}
+
 export interface ElementProperty {
     name: string;
     // eslint-disable-next-line @typescript-eslint/naming-convention
@@ -29,31 +42,31 @@ export interface ElementProperty {
     signature?: [string, string][];
 }
 
-interface ElementDetail {
-    properties?: ElementProperty[];
-    inherits?: string[];
-}
-
 // visual elements parser
-export const getElementProperties = (visualElements: object): Record<string, Record<string, ElementProperty>> => {
-    const blocks: Record<string, ElementDetail> = (
-        visualElements["blocks" as keyof typeof visualElements] as any
-    ).reduce((obj: Record<string, ElementDetail>, v: any) => {
-        obj[v[0]] = v[1];
-        return obj;
-    }, {} as Record<string, ElementDetail>);
-    const controls: Record<string, ElementDetail> = (
-        visualElements["controls" as keyof typeof visualElements] as any
-    ).reduce((obj: Record<string, ElementDetail>, v: any) => {
-        obj[v[0]] = v[1];
-        return obj;
-    }, {} as Record<string, ElementDetail>);
-    const undocumented: Record<string, ElementDetail> = (
-        visualElements["undocumented" as keyof typeof visualElements] as any
-    ).reduce((obj: Record<string, ElementDetail>, v: any) => {
-        obj[v[0]] = v[1];
-        return obj;
-    }, {} as Record<string, ElementDetail>);
+export const getElementProperties = (
+    visualElements: VisualElements,
+): Record<string, Record<string, ElementProperty>> => {
+    const blocks: Record<string, ElementDetail> = (visualElements["blocks"] || []).reduce(
+        (obj: Record<string, ElementDetail>, v: any) => {
+            obj[v[0]] = v[1];
+            return obj;
+        },
+        {} as Record<string, ElementDetail>,
+    );
+    const controls: Record<string, ElementDetail> = (visualElements["controls"] || []).reduce(
+        (obj: Record<string, ElementDetail>, v: any) => {
+            obj[v[0]] = v[1];
+            return obj;
+        },
+        {} as Record<string, ElementDetail>,
+    );
+    const undocumented: Record<string, ElementDetail> = (visualElements["undocumented"] || []).reduce(
+        (obj: Record<string, ElementDetail>, v: any) => {
+            obj[v[0]] = v[1];
+            return obj;
+        },
+        {} as Record<string, ElementDetail>,
+    );
     const blocksProperties: Record<string, Record<string, ElementProperty>> = {};
     const controlsProperties: Record<string, Record<string, ElementProperty>> = {};
     // handle all blocks object
@@ -68,19 +81,15 @@ export const getElementProperties = (visualElements: object): Record<string, Rec
     return { ...blocksProperties, ...controlsProperties };
 };
 
-export const getBlockElementList = (visualElements: object): string[] => {
-    return (visualElements["blocks" as keyof typeof visualElements] as (typeof Object)[]).map(
-        (v: any) => v[0] as string,
-    );
+export const getBlockElementList = (visualElements: VisualElements): string[] => {
+    return (visualElements["blocks"] || []).map((v: any) => v[0] as string);
 };
 
-export const getControlElementList = (visualElements: object): string[] => {
-    return (visualElements["controls" as keyof typeof visualElements] as (typeof Object)[]).map(
-        (v: any) => v[0] as string,
-    );
+export const getControlElementList = (visualElements: VisualElements): string[] => {
+    return (visualElements["controls"] || []).map((v: any) => v[0] as string);
 };
 
-export const getElementList = (visualElements: object): string[] => {
+export const getElementList = (visualElements: VisualElements): string[] => {
     return [...getControlElementList(visualElements), ...getBlockElementList(visualElements)];
 };
 
@@ -176,46 +185,74 @@ export const execShell = (cmd: string) =>
     new Promise<string>((resolve, reject) => {
         exec(cmd, (err, out) => {
             if (err) {
-                getLog().error(l10n.t("Find element descriptors file: "), err.message || err);
+                getLog().error(l10n.t("Find element descriptor files: "), err.message || err);
                 return reject(err);
             }
             return resolve(out);
         });
     });
 
-export const getElementFilePath = (): string | null => {
+export const getElementFilePaths = (): string[] => {
     const config = workspace.getConfiguration(CONFIG_NAME);
-    if (config.has("elementsFilePath") && config.get("elementsFilePath")) {
-        const filePath = config.get("elementsFilePath") as string;
-        if (existsSync(filePath)) {
-            return filePath;
-        }
-        // Reset if filepath is not valid
-        updateFilePath("");
-        return null;
+    if (config.has("elementsFilePaths") && config.get("elementsFilePaths")) {
+        let filePaths = config.get("elementsFilePaths") as string[];
+        filePaths = filePaths.filter((v) => existsSync(v));
+        updateFilePaths(filePaths);
+        return filePaths;
     }
-    return null;
+    return [];
 };
 
-export const updateFilePath = (path: string) => {
+export const updateFilePaths = (paths: string[]) => {
     const config = workspace.getConfiguration(CONFIG_NAME);
-    config.update("elementsFilePath", path);
+    config.update("elementsFilePaths", paths);
+    ElementProvider.invalidateCache();
 };
 
-export const getElementFile = (path: string): object | undefined => {
+export const getElementsFromFile = (path: string): VisualElements | undefined => {
     try {
         const content = readFileSync(path, { encoding: "utf8", flag: "r" });
         const elements = JSON.parse(content);
-        if ("controls" in elements && "blocks" in elements && "undocumented" in elements) {
-            return elements;
-        }
-        // Reset if filepath is not valid
-        if (path === getElementFilePath()) {
-            updateFilePath("");
-        }
-        return undefined;
+        return elements as VisualElements;
     } catch (error: any) {
-        getLog().error(l10n.t("Parse element descriptors file: "), error.message || error);
+        getLog().error(l10n.t("Parse element descriptor files: "), error.message || error);
         return undefined;
     }
+};
+
+export const getElementsFromFiles = (paths: string[]): VisualElements | undefined => {
+    let visualElements = getEmptyVisualElements();
+    if (paths.length === 0) {
+        return undefined;
+    }
+    let registeredPathCount = 0;
+    for (const path of paths) {
+        const elements = getElementsFromFile(path);
+        if (elements) {
+            registeredPathCount++;
+            // Merge all elements with visual elements, checking for duplicates on the first item of each element
+            visualElements = mergeElements(visualElements, elements, "blocks");
+            visualElements = mergeElements(visualElements, elements, "controls");
+            visualElements = mergeElements(visualElements, elements, "undocumented");
+        }
+    }
+    if (registeredPathCount === 0) {
+        return undefined;
+    }
+    return visualElements;
+};
+
+const mergeElements = (
+    basedVisualElements: VisualElements,
+    newVisualElements: VisualElements,
+    section: keyof VisualElements,
+): VisualElements => {
+    const basedElements = basedVisualElements[section] || [];
+    const newElements = newVisualElements[section] || [];
+    const mergedElements = newElements.filter((v) => !basedElements.map((v) => v[0]).includes(v[0]));
+    return { ...basedVisualElements, [section]: [...basedElements, ...mergedElements] };
+};
+
+export const getEmptyVisualElements = (): VisualElements => {
+    return { blocks: [], controls: [], undocumented: [] };
 };

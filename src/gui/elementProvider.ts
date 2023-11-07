@@ -20,18 +20,19 @@ import {
 } from "./constant";
 import {
     ElementProperty,
+    VisualElements,
     getBlockElementList,
     getControlElementList,
-    getElementFile,
-    getElementFilePath,
+    getElementFilePaths,
     getElementList,
     getElementProperties,
+    getElementsFromFiles,
     getOnFunctionList,
     getOnFunctionSignature,
 } from "./utils";
 
 export class ElementProvider {
-    private static elementCache: Record<string, Record<string, any>> = {};
+    private static elementCache: Record<string, any> = {};
 
     public static getElementProperties(): Record<string, Record<string, ElementProperty>> {
         return ElementProvider.resolve("elementProperties", defaultElementProperties, getElementProperties);
@@ -50,41 +51,46 @@ export class ElementProvider {
     }
 
     public static getOnFunctionList(): string[] {
-        const filePath = getElementFilePath();
-        if (filePath === null) {
+        const filePaths = getElementFilePaths();
+        if (filePaths.length === 0) {
             return defaultOnFunctionList;
         }
         return getOnFunctionList(ElementProvider.getElementProperties());
     }
 
     public static getOnFunctionSignature(): Record<string, [string, string][]> {
-        const filePath = getElementFilePath();
-        if (filePath === null) {
+        const filePaths = getElementFilePaths();
+        if (filePaths.length === 0) {
             return defaultOnFunctionSignature;
         }
         return getOnFunctionSignature(ElementProvider.getElementProperties());
     }
 
-    private static resolve(propertyName: string, defaultValue: any, elementsAnalyzer: (viselements: object) => any) {
-        const filePath = getElementFilePath();
-        if (filePath === null) {
+    public static invalidateCache() {
+        ElementProvider.elementCache = {};
+    }
+
+    private static resolve(
+        propertyName: string,
+        defaultValue: any,
+        elementsAnalyzer: (visualElements: VisualElements) => any,
+    ) {
+        const filePaths = getElementFilePaths();
+        if (filePaths.length === 0) {
             return defaultValue;
         }
-        if (ElementProvider.elementCache[filePath] === undefined) {
-            ElementProvider.elementCache[filePath] = {};
+        if (propertyName in ElementProvider.elementCache) {
+            return ElementProvider.elementCache[propertyName];
         }
-        if (propertyName in ElementProvider.elementCache[filePath]) {
-            return ElementProvider.elementCache[filePath][propertyName];
-        }
-        const visualElements = ElementProvider.elementCache[filePath]["visualElements"] || getElementFile(filePath);
+        const visualElements = ElementProvider.elementCache["visualElements"] || getElementsFromFiles(filePaths);
         if (!visualElements) {
             return defaultValue;
         }
-        if (!(propertyName in ElementProvider.elementCache[filePath])) {
-            ElementProvider.elementCache[filePath].visualElements = visualElements;
+        if (!(propertyName in ElementProvider.elementCache)) {
+            ElementProvider.elementCache.visualElements = visualElements;
         }
         const result = elementsAnalyzer(visualElements);
-        ElementProvider.elementCache[filePath][propertyName] = result;
+        ElementProvider.elementCache[propertyName] = result;
         return result;
     }
 }
