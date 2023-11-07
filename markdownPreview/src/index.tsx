@@ -14,7 +14,12 @@ import { createRoot } from "react-dom/client";
 
 import App from "./components/App";
 
-function init() {
+const init = () => {
+    let allElements = Array.from(document.querySelectorAll("*"));
+    // Checks if the markdown contains any taipy elements
+    if (!allElements.some((el) => el.tagName.toLowerCase().startsWith("taipy"))) {
+        return;
+    }
     const mdbd = document.getElementsByClassName("markdown-body");
     const markdownBodyHTML = mdbd[mdbd.length - 1].outerHTML;
     mdbd[mdbd.length - 1].remove();
@@ -27,8 +32,17 @@ function init() {
     }
     rootDiv.innerHTML = "";
     const root = createRoot(rootDiv);
-    root.render(<App jsx={markdownBodyHTML} baseHref={baseHref} />);
-}
+    root.render(<App jsx={formatHtmlBody(markdownBodyHTML)} baseHref={baseHref} />);
+};
+
+const formatHtmlBody = (html: string) => {
+    // Regular expression to find curly braces outside of HTML tags
+    const regex = /(\{[^}]*\})(?![^<]*>)/g;
+    const replaceBraces = (match: string) => {
+        return match.replace(/{/g, "&#123;").replace(/}/g, "&#125;");
+    };
+    return html.replace(regex, replaceBraces);
+};
 
 window.addEventListener("vscode.markdown.updateContent", init);
 
