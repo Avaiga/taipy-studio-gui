@@ -10,7 +10,7 @@
     "watch": "webpack watch --mode development"
   },
   "devDependencies": {
-    "@trivago/prettier-plugin-sort-imports": "^4.1.1",
+    "@trivago/prettier-plugin-sort-imports": "^4.2.1",
     "@types/lodash": "^4.14.191",
     "@types/react": "^18.0.18",
     "@types/react-dom": "^18.0.6",
