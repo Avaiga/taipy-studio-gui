@@ -135,7 +135,7 @@ export class FindElementsFileCommand {
                         `${pythonPath} ${join(__dirname, "assets", "find_element_file.py")}`,
                     );
                     if (execResult.startsWith("Path: ")) {
-                        updateFilePaths(execResult.substring(6).split(";;;"));
+                        updateFilePaths(execResult.trim().substring(6).split(";;;"));
                         window.showInformationMessage(
                             l10n.t("Visual element descriptor files was found and updated in workspace settings"),
                         );
