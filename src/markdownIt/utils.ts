@@ -72,7 +72,8 @@ export const parseMockData = (value: string): string => {
                     }
                 }
             }
-            value = value.replace(new RegExp(searchString, "g"), replaceData);
+            const escapedSearchString = searchString.replace(/[-\/\\^$*+?.()|[\]{}]/g, "\\$&");
+            value = value.replace(new RegExp(escapedSearchString, "g"), replaceData);
         }
     } catch (error: any) {
         getLog().error(l10n.t("Parse mock data file: "), error.message || error);
