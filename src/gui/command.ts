@@ -129,7 +129,7 @@ export class FindElementsFileCommand {
                 cancellable: false,
                 title: l10n.t("Finding visual element descriptor files"),
             },
-            async (progress) => {
+            async (_progress) => {
                 try {
                     const execResult = await execShell(
                         `${pythonPath} ${join(__dirname, "assets", "find_element_file.py")}`,
