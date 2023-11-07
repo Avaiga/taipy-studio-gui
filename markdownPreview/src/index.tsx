@@ -35,13 +35,13 @@ const init = () => {
     root.render(<App jsx={formatHtmlBody(markdownBodyHTML)} baseHref={baseHref} />);
 };
 
+// Regular expression to find curly braces outside of HTML tags
+const replaceCurlyBracesRegex = /(?:\{[^}]*\})(?![^<]*>)/g;
+const replaceCurlyBraces = (match: string) => {
+    return match.replace(/{/g, "&#123;").replace(/}/g, "&#125;");
+};
 const formatHtmlBody = (html: string) => {
-    // Regular expression to find curly braces outside of HTML tags
-    const regex = /(\{[^}]*\})(?![^<]*>)/g;
-    const replaceBraces = (match: string) => {
-        return match.replace(/{/g, "&#123;").replace(/}/g, "&#125;");
-    };
-    return html.replace(regex, replaceBraces);
+    return html.replace(replaceCurlyBracesRegex, replaceCurlyBraces);
 };
 
 window.addEventListener("vscode.markdown.updateContent", init);
