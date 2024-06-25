@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Avaiga Private Limited
+ * Copyright 2024 Avaiga Private Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -21,7 +21,7 @@ import {
     ListItemText,
     SxProps,
     Tooltip,
-    TypographyProps,
+    TypographyOwnProps,
 } from "@mui/material";
 import { CSSProperties, MouseEvent, useMemo } from "react";
 
@@ -48,7 +48,7 @@ export const LovImage = ({
     item: Icon;
     disableTypo?: boolean;
     height?: string;
-    titleTypographyProps?: TypographyProps;
+    titleTypographyProps?: TypographyOwnProps;
 }) => {
     const sx = useMemo(
         () => (height ? { height: height, "& .MuiAvatar-img": { objectFit: "contain" } } : undefined) as SxProps,
@@ -63,7 +63,7 @@ export const LovImage = ({
                 </Tooltip>
             }
             title={item.text}
-            disableTypography={disableTypo}
+            disableTypography={!!disableTypo}
             titleTypographyProps={titleTypographyProps}
         />
     );
@@ -98,7 +98,7 @@ export interface ItemProps {
     item: LovItem;
     disabled: boolean;
     withAvatar?: boolean;
-    titleTypographyProps?: TypographyProps;
+    titleTypographyProps?: TypographyOwnProps;
 }
 
 export const SingleItem = ({

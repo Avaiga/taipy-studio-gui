@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Avaiga Private Limited
+ * Copyright 2024 Avaiga Private Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -11,14 +11,14 @@
  * specific language governing permissions and limitations under the License.
  */
 
-import { PaletteMode, createTheme } from "@mui/material";
+import { PaletteMode, ThemeOptions, createTheme } from "@mui/material";
 import { merge } from "lodash";
 
 import { stylekitModeThemes, stylekitTheme } from "./stylekit";
 
 export const getUserTheme = (mode: PaletteMode) => {
     return createTheme(
-        merge(stylekitTheme, stylekitModeThemes[mode], {
+        merge(stylekitTheme as ThemeOptions, stylekitModeThemes[mode], {
             palette: {
                 mode: mode,
             },

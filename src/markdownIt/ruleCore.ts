@@ -1,5 +1,5 @@
 /*
- * Copyright 2023 Avaiga Private Limited
+ * Copyright 2024 Avaiga Private Limited
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not use this file except in compliance with
  * the License. You may obtain a copy of the License at
@@ -10,10 +10,7 @@
  * an "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the License for the
  * specific language governing permissions and limitations under the License.
  */
-import MarkdownIt from "markdown-it";
-import { RuleCore } from "markdown-it/lib/parser_core";
-import StateCore from "markdown-it/lib/rules_core/state_core";
-import Token from "markdown-it/lib/token";
+import MarkdownIt, {StateCore} from "markdown-it";
 
 import { CLOSING_TAG_RE, CONTROL_RE, OPENING_TAG_RE, buildEmptyTaipyElement, processElement } from "../gui/diagnostics";
 import { PLUGIN_NAME } from "./constant";
@@ -26,8 +23,8 @@ const parsedPropertyList = ["defaultValue", "lov", "value"];
 
 const getTaipyReplace = (md: MarkdownIt) => {
     const arrayReplaceAt = md.utils.arrayReplaceAt;
-    const taipyReplace: RuleCore = (state: StateCore) => {
-        const tokens: Token[] = state.tokens;
+    const taipyReplace = (state: StateCore) => {
+        const tokens = state.tokens;
         const tagQueue: string[] = [];
         for (let j = 0; j < tokens.length; j++) {
             if (tokens[j].type !== "inline") {
@@ -40,9 +37,9 @@ const getTaipyReplace = (md: MarkdownIt) => {
                 }
                 continue;
             }
-            const childTokens: Token[] = tokens[j].children || [];
+            const childTokens: MarkdownIt.Token[] = tokens[j].children || [];
             for (let i = 0; i < childTokens.length; i++) {
-                const token: Token = childTokens[i];
+                const token = childTokens[i];
                 if (token.type === "text") {
                     const openingTagSearch = OPENING_TAG_RE.exec(token.content);
                     if (openingTagSearch) {
@@ -90,9 +87,9 @@ export const getTokenAttribute = (name: string, value: string): [string, string]
     return [name, value];
 };
 
-const getOpeningToken = (content: string, tokenClass: typeof Token): Token[] => {
-    let tokenNodes: Token[] = [],
-        lastPos = 0;
+const getOpeningToken = (content: string, tokenClass: StateCore["Token"]) => {
+    const tokenNodes=[];
+    let lastPos = 0;
     content.replace(REPLACE_OPENING_TAG_RE, (match: string, _p1: string, _p2: string, offset: number): string => {
         const regexMatchResult = OPENING_TAG_RE.exec(match);
         if (offset > lastPos) {
@@ -119,9 +116,9 @@ const getOpeningToken = (content: string, tokenClass: typeof Token): Token[] => 
     return tokenNodes;
 };
 
-const getControlToken = (content: string, tokenClass: typeof Token): Token[] => {
-    let tokenNodes: Token[] = [],
-        lastPos = 0;
+const getControlToken = (content: string, tokenClass: StateCore["Token"]) => {
+    const tokenNodes = [];
+    let lastPos = 0;
     content.replace(REPLACE_CONTROL_RE, (match: string, _p1: string, offset: number): string => {
         const regexMatchResult = CONTROL_RE.exec(match);
         if (offset > lastPos) {
@@ -148,9 +145,9 @@ const getControlToken = (content: string, tokenClass: typeof Token): Token[] => 
     return tokenNodes;
 };
 
-const getClosingToken = (content: string, tag: string, tokenClass: typeof Token): Token[] => {
-    let tokenNodes: Token[] = [],
-        lastPos = 0;
+const getClosingToken = (content: string, tag: string, tokenClass: StateCore["Token"]) => {
+    const tokenNodes= [];
+        let lastPos = 0;
     content.replace(REPLACE_CLOSING_TAG_RE, (match: string, _p1: string, offset: number): string => {
         if (offset > lastPos) {
             let token = new tokenClass("text", "", 0);
