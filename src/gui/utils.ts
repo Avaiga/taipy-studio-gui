@@ -40,53 +40,42 @@ export interface ElementProperty {
     type: string;
     doc: string;
     signature?: [string, string][];
+    hide?: boolean;
 }
+
+const getObjectFromGroups = (groups: Array<[string, ElementDetail]> = []) => groups.reduce(
+    (obj, v) => {
+        obj[v[0]] = v[1];
+        return obj;
+    },
+    {} as Record<string, ElementDetail>,
+);
 
 // visual elements parser
 export const getElementProperties = (
     visualElements: VisualElements,
 ): Record<string, Record<string, ElementProperty>> => {
-    const blocks: Record<string, ElementDetail> = (visualElements["blocks"] || []).reduce(
-        (obj: Record<string, ElementDetail>, v: any) => {
-            obj[v[0]] = v[1];
-            return obj;
-        },
-        {} as Record<string, ElementDetail>,
-    );
-    const controls: Record<string, ElementDetail> = (visualElements["controls"] || []).reduce(
-        (obj: Record<string, ElementDetail>, v: any) => {
-            obj[v[0]] = v[1];
-            return obj;
-        },
-        {} as Record<string, ElementDetail>,
-    );
-    const undocumented: Record<string, ElementDetail> = (visualElements["undocumented"] || []).reduce(
-        (obj: Record<string, ElementDetail>, v: any) => {
-            obj[v[0]] = v[1];
-            return obj;
-        },
-        {} as Record<string, ElementDetail>,
-    );
+    const blocks = getObjectFromGroups(visualElements.blocks);
+    const controls = getObjectFromGroups(visualElements.controls);
+    const undocumented = getObjectFromGroups(visualElements.undocumented);
     const blocksProperties: Record<string, Record<string, ElementProperty>> = {};
     const controlsProperties: Record<string, Record<string, ElementProperty>> = {};
     // handle all blocks object
-    Object.keys(blocks).forEach((v: string) => {
-        let elementDetail: ElementDetail = blocks[v];
+    Object.entries(blocks).forEach(([v, elementDetail]) => {
         blocksProperties[v] = getElementDetailProperties(elementDetail, blocks, controls, undocumented);
     });
-    Object.keys(controls).forEach((v: string) => {
-        let elementDetail: ElementDetail = controls[v];
+    Object.entries(controls).forEach(([v, elementDetail]) => {
         controlsProperties[v] = getElementDetailProperties(elementDetail, blocks, controls, undocumented);
     });
     return { ...blocksProperties, ...controlsProperties };
 };
 
 export const getBlockElementList = (visualElements: VisualElements): string[] => {
-    return (visualElements["blocks"] || []).map((v: any) => v[0] as string);
+    return (visualElements.blocks || []).map((v: any) => v[0] as string);
 };
 
 export const getControlElementList = (visualElements: VisualElements): string[] => {
-    return (visualElements["controls"] || []).map((v: any) => v[0] as string);
+    return (visualElements.controls || []).map((v: any) => v[0] as string);
 };
 
 export const getElementList = (visualElements: VisualElements): string[] => {
@@ -139,10 +128,16 @@ const getElementDetailProperties = (
     controls: Record<string, ElementDetail>,
     undocumented: Record<string, ElementDetail>,
 ): Record<string, ElementProperty> => {
-    return {
+    const elt = {
         ...parsePropertyList(elementDetail.properties),
         ...handleElementDetailInherits(elementDetail.inherits, blocks, controls, undocumented),
     };
+    return Object.entries(elt).reduce((obj, [name, prop]) => {
+        if (!prop.hide) {
+            obj[name] = prop;
+        }
+        return obj;
+    }, {} as typeof elt );
 };
 
 export const getOnFunctionList = (elementProperties: Record<string, Record<string, ElementProperty>>): string[] => {
@@ -150,7 +145,7 @@ export const getOnFunctionList = (elementProperties: Record<string, Record<strin
     for (const key in elementProperties) {
         const elementProperty = elementProperties[key];
         for (const k in elementProperty) {
-            if (k.startsWith("on_")) {
+            if (k.startsWith("on_") || elementProperty[k].type.includes("Callable")) {
                 onFunctionList.add(k);
             }
         }
